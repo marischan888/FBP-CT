@@ -1,15 +1,17 @@
-# Project Name
+# CT image reconstruction
 
-Developer Names:
+Developer Names: Qianlin Chen
 
-Date of project start:
+Date of project start: Jan 16, 2025
 
-This project is ...
+## Introduction
+This project is about the CT image reconstruction with filtering technique: *Sheep-Logan Filter*, *Hamming Filtering*.
 
-The folders and files for this project are as follows:
+## Folder Structure
+docs - Documentation for the project 
 
-docs - Documentation for the project
-refs - Reference material used for the project, including papers
-src - Source code
+refs - Reference material used for the project, including papers 
+
+src - Source code 
+
 test - Test cases
-etc.
