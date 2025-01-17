@@ -7,7 +7,7 @@
 
 \author{\authname}
 
-\date{}
+\date{\today}
 
 \input{../Comments}
 \input{../Common}
@@ -22,36 +22,70 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+  January 16, 2025 & Qianlin Chen & Initial Draft \\
+\midrule
+  ... & ... & ...\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.} 
-
-\wss{You can change the section headings, as long as you include the required
-information.}
-
 \subsection{Problem}
+% Background
+With the arrival of Computed Tomography (CT) as a diagnostic tool in medical
+imaging, X-ray imaging underwent a revolution. Tomography is a method of imaging
+a two- or three-dimensional object from multiple one-dimensional ``slices'' of
+the object. In a CT scan, these slices are created by multiple parallel X-ray
+beams passing through the object at varying angles. The initial and final
+intensity of each beam is recorded, and the original image is reconstructed
+using backprojection with data from multiple slices.
+%% What is the problem and Why is this problem matter:
+%% TODO: citation of problem
+\newline However, significant noise blurs the recreated image, even as the number of
+backprojections increases. Regardless of the number of directions used for
+backprojection, it cannot perfectly recreate the image using the backprojection
+formula. Therefore, it is necessary to develop techniques to filter out noise
+created by backprojection and produce a smoother representation of the object.
+Additionally, different filtering techniques may yield varying reconstruction
+efficiencies, so selecting an appropriate filter is crucial.
 
 \subsection{Inputs and Outputs}
+\subsubsection{Inputs}
+\begin{itemize}
+\item Phantom images.
+\item Sinogram data.
+\item Projection angles in degrees.
+\item Filter tupe to be applied during backprojection.
+\end{itemize}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+\subsubsection{Outputs}
+\begin{itemize}
+  \item Reconstructed CT images.
+\end{itemize}
 
 \subsection{Stakeholders}
+\begin{itemize}
+  \item Researchers/Company that want to use the CT image reconstruction with
+    filter techniques.
+\end{itemize}
 
 \subsection{Environment}
-
-\wss{Hardware and software environment}
+\begin{description}
+\item[Software] Windows, Linux or Mac OS
+ %% do I need hardware like CT scanner? \item[Hardware] 
+\end{description}
 
 \section{Goals}
+\begin{description}
+\item[CT images qualities improvement]\newline The product should provide at least three
+  types of visual effects to show the instructor's motions in Tai Chi lectures,
+  making it easier to see the instructor's motions in video calls.
+\item[Images reconstruction efficient improvement] \newline
+\item[Ease of use] \newline The application should be intuitive to use and no further
+  instruction is required. People of all age groups should be able to learn all
+  the features of the application with ease.
+\end{description}
 
 \section{Stretch Goals}
 
@@ -82,12 +116,12 @@ instructor, can be modified over the course of the term.}
 \input{../Reflection.tex}
 
 \begin{enumerate}
-    \item What went well while writing this deliverable? 
+    \item What went well while writing this deliverable?
     \item What pain points did you experience during this deliverable, and how
     did you resolve them?
     \item How did you and your team adjust the scope of your goals to ensure
     they are suitable for a Capstone project (not overly ambitious but also of
     appropriate complexity for a senior design project)?
-\end{enumerate}  
+\end{enumerate}
 
 \end{document}
