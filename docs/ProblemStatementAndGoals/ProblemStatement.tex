@@ -56,7 +56,7 @@ efficiencies, so selecting an appropriate filter is crucial.
 \item Phantom images.
 \item Sinogram data.
 \item Projection angles in degrees.
-\item Filter tupe to be applied during backprojection.
+\item Filter type to be applied during backprojection.
 \end{itemize}
 
 \subsubsection{Outputs}
@@ -66,30 +66,45 @@ efficiencies, so selecting an appropriate filter is crucial.
 
 \subsection{Stakeholders}
 \begin{itemize}
-  \item Researchers/Company that want to use the CT image reconstruction with
-    filter techniques.
+\item Researchers
+\item Hospital
 \end{itemize}
 
 \subsection{Environment}
 \begin{description}
 \item[Software] Windows, Linux or Mac OS
- %% do I need hardware like CT scanner? \item[Hardware] 
 \end{description}
 
 \section{Goals}
 \begin{description}
-\item[CT images qualities improvement]\newline The product should provide at least three
-  types of visual effects to show the instructor's motions in Tai Chi lectures,
-  making it easier to see the instructor's motions in video calls.
-\item[Images reconstruction efficient improvement] \newline
-\item[Ease of use] \newline The application should be intuitive to use and no further
-  instruction is required. People of all age groups should be able to learn all
-  the features of the application with ease.
+\item[Image Quality Enhancement] \hfill \\ The quality of reconstructed images will
+  improve through advanced filtering techniques.
+\item[Filter Options] \hfill \\ High-pass and low-pass filters will be available to
+  enhance flexibility and optimize reconstruction.
+\item[User-Friendly Design] \hfill \newline The application will be intuitive, requiring
+  no additional instructions for users to understand all features.
 \end{description}
 
 \section{Stretch Goals}
+\begin{description}
+\item[Adaptive Filtering] \hfill \\ Implement adaptive filters that automatically
+  adjust based on the image characteristics, reducing manual intervention.
+\item[Real-Time Reconstruction] \hfill \\ Develop functionality for real-time
+  image reconstruction during the scanning process, enabling faster
+  diagnostics.
+\end{description}
 
 \section{Challenge Level and Extras}
+The primary challenge of this project lies in the integration of domain
+knowledge from the medical and mathematical fields. Understanding the principles
+of medical imaging, including tomography and the Radon transform, as well as
+mastering the associated mathematical concepts, requires significant learning
+and effort.\\
+While coding is not a challenge, testing poses another difficulty
+due to limited access to high-quality data, which could impact the evaluation of
+reconstruction accuracy and filter performance. Addressing these issues will
+demand innovative approaches, such as using simulated data or augmenting limited
+datasets.
 
 \wss{State your expected challenge level (advanced, general or basic).  The
 challenge can come through the required domain knowledge, the implementation or
