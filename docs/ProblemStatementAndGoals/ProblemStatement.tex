@@ -32,6 +32,10 @@
 \end{table}
 
 \section{Problem Statement}
+The following section highlights the challenges in reconstructing clear CT
+images during the backprojection process, with a particular focus on selecting
+appropriate filtering techniques. Addressing these challenges is crucial for
+developing solutions that improve image clarity and enhance diagnostic accuracy.
 
 \subsection{Problem}
 % Background
@@ -41,7 +45,7 @@ a two- or three-dimensional object from multiple one-dimensional ``slices'' of
 the object. In a CT scan, these slices are created by multiple parallel X-ray
 beams passing through the object at varying angles. The initial and final
 intensity of each beam is recorded, and the original image is reconstructed
-using backprojection with this data from multiple slices.
+using backprojection with this data from multiple slices\cite{Beatty2012}.
 %% What is the problem and Why is this problem matter:
 \newline However, significant noise blurs the recreated image, even as the number of
 backprojections increases. Regardless of the number of directions used for
@@ -49,7 +53,7 @@ backprojection, it can not perfectly recreate the image using the backprojection
 formula\cite{Beatty2012}. Therefore, it is necessary to develop techniques to filter out noise
 created by backprojection and produce a smoother representation of the object.
 Additionally, different filtering techniques may yield varying reconstruction
-efficiencies, so selecting an appropriate filter is crucial.
+efficiencies, so selecting an appropriate filter is crucial\cite{Lyra2011}.
 
 \subsection{Inputs and Outputs}
 \subsubsection{Inputs}
@@ -83,8 +87,6 @@ efficiencies, so selecting an appropriate filter is crucial.
   the quality of reconstructed CT images through advanced filtering techniques.
 \item[Filter Options] \hfill \\ The tool should provide high-pass and
   low-pass filter options to filter different types of noise.
-\item[User-Friendly Design] \hfill \newline The tool will be intuitive, requiring
-  no additional instructions for users to understand all features.
 \end{description}
 
 \section{Stretch Goals}
@@ -99,17 +101,21 @@ efficiencies, so selecting an appropriate filter is crucial.
 The main challenge lies in the integration of domain knowledge from the medical
 and mathematical fields. Understanding the principles of medical imaging,
 including tomography and the Radon transform, as well as mastering the
-associated mathematical concepts, requires additional effort.\\
+associated mathematical concepts, requires additional effort.
+
 Testing poses another difficulty in this project. For functional testing, the
 lack of access to high-quality datasets limits the ability to evaluate the
 accuracy and effectiveness of the reconstruction process. For usability testing,
 reaching potential users, such as researchers in medical imaging or related
-fields, is difficult due to their limited availability.\\
+fields, is difficult due to their limited availability.
+
 The expected challenge level for this project is general. While it requires
 medical and mathematical knowledge, many research resources are available
 online. The CT image reconstruction process is well-documented and feasible for
 implementation. This project is appropriate for graduate-level study, combining
-computer science with interdisciplinary applications.\\
+computer science with interdisciplinary applications. Since the project is
+intended as a tool rather than for research purposes, a user manual is essential
+to guide users in effectively using the tool.
 
 \newpage
 \printbibliography
