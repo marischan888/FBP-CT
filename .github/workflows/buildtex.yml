@@ -19,20 +19,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-            - name: Get changed LaTeX files
-              run: |
-                CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- docs/**/*.tex | xargs)
-                echo "Changed files: $CHANGED_FILES"
-                echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
-                CHANGED_FILENAMES=$(for file in $CHANGED_FILES; do basename "$file"; done | xargs)
-                echo "CHANGED_FILENAMES=$CHANGED_FILENAMES" >> $GITHUB_ENV
-                FILE_COUNT=$(echo $CHANGED_FILENAMES | wc -w)
-                if [ $FILE_COUNT -gt 1 ]; then
-                  PLURAL_S='s'
-                else
-                  PLURAL_S=''
-                fi
-                echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
+      - name: Get changed LaTeX files
+        id: latex-files
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- docs/**/*.tex | xargs)
+          echo "Changed files: $CHANGED_FILES"
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+          CHANGED_FILENAMES=$(for file in $CHANGED_FILES; do basename "$file"; done | xargs)
+          echo "CHANGED_FILENAMES=$CHANGED_FILENAMES" >> $GITHUB_ENV
+          FILE_COUNT=$(echo $CHANGED_FILENAMES | wc -w)
+          if [ $FILE_COUNT -gt 1 ]; then
+            PLURAL_S='s'
+          else
+            PLURAL_S=''
+          fi
+          echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
       - uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
