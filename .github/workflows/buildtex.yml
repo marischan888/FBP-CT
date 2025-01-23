@@ -20,7 +20,6 @@ jobs:
         with:
           fetch-depth: 0
             - name: Get changed LaTeX files
-              id: latex-files
               run: |
                 CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- docs/**/*.tex | xargs)
                 echo "Changed files: $CHANGED_FILES"
