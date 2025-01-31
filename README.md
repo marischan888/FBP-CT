@@ -1,4 +1,4 @@
-# CT image reconstruction
+# Filter Back-projection for CT image Reconstruction
 
 Developer Names: Qianlin Chen
 

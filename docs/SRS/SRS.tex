@@ -20,6 +20,8 @@
 \usepackage{afterpage}
 
 \usepackage[round]{natbib}
+\usepackage{biblatex}
+\addbibresource{../../refs/References.bib}
 
 %\usepackage{refcheck}
 
@@ -147,8 +149,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Jan 23, 2025 & 1.0 & Initial Draft
+... & 1.1 & \\
 \bottomrule
 \end{tabularx}
 
@@ -161,11 +163,11 @@ should have a reflection appendix.}
 
 ~\newpage
 
-\section{Reference Material}
+\section{Reference Material}\label{reference material}
 
 This section records information for easy reference.
 
-\subsection{Table of Units for testing}
+\subsection{Table of Units}
 
 Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
 as the unit system.  In addition to the basic units, several derived units are
@@ -335,70 +337,73 @@ which heat is transferred in
   trust the authors of the SRS on any statements.  They should be able to
   independently verify/derive every statement made.}
 
-\section{Introduction}
+\section{Introduction} \label{introduction}
+%% Problem domain
+Reconstruction is the process of turning raw data collected by the detectors
+into image data which can be viewed on a screen. Both raw data and image data
+can be manipulated in different ways to create images with differing properties.
 
-\plt{The introduction section is written to introduce the problem.  It starts
-  general and focuses on the problem domain. The general advice is to start with
-a paragraph or two that describes the problem, followed by a ``roadmap''
-paragraph.  A roadmap orients the reader by telling them what sub-sections to
-expect in the Introduction section.}
+The most rudimentary process of turning raw data into image data is called
+back-projection. This is the process of mathematically mapping the attenuation
+pathway at every angle measured through a scan to locate where in a patient
+attenuation is occurring.
+
+%% Problem description
+However, even if the number of back-projection is increased (say to 1000 directions),
+there is still a large amount of noise blurring the recreate image. As it turns
+out, no matter how many directions we try to backproject in, it is not able to
+perfectly recreate our image using the back-projection. For this process to be at
+all useful, it is necessary to derive a way to filter out some of the noise the
+back-projection formula seems to create in our picture and get a smoother
+representation of our object \cite{Beatty2012}.
+
+%% Roadmap for what subsection to expect in the Introduction section
+The following subsections will ...
 
 \subsection{Purpose of Document}
+This document serves to guide software developers and researchers in
+understanding the technical challenges and requirements involved in the project.
+It aims to facilitate effective communication between team members and domain
+experts, ensuring a correct and efficient implementation of Filter
+Back-projection (FBP) method for CT image reconstruction.
 
-\plt{This section summarizes the purpose of the SRS document.  It does not focus
-  on the problem itself.  The problem is described in the ``Problem
-  Description'' section (Section~\ref{Sec_pd}).  The purpose is for the document
-  in the context of the project itself, not in the context of this course.
-  Although the ``purpose'' of the document is to get a grade, you should not
-  mention this.  Instead, ``fake it'' as if this is a real project.  The purpose
-  section will be similar between projects.  The purpose of the document is the
-  purpose of the SRS, including communication, planning for the design stage,
-  etc.}
+Additionally, this document serves as a reference for users of the software to
+understand its capabilities, limitations, and assumptions. It also acts as a
+valuable resource for future maintenance, and verification of the implemented
+methods, ensuring long-term usability and reliability of the software.
 
-\subsection{Scope of Requirements} 
+\subsection{Scope of Requirements}
+This project focuses on implementing FBP methods for CT image reconstruction,
+with simplifications applied to manage the complexity of real-world challenges.
+The scope is constrained to reconstructing 2D images from raw projection data
+obtained through ideal scanning conditions. It excludes considerations such as
+non-ideal scanner geometries, variations in detector sensitivity, or artifacts
+caused by motion during scanning.
 
-\plt{Modelling the real world requires simplification.  The full complexity of
-  the actual physics, chemistry, biology is too much for existing models, and
-  for existing computational solution techniques.  Rather than say what is in
-  the scope, it is usually easier to say what is not.  You can think of it as
-  the scope is initially everything, and then it is constrained to create the
-  actual scope.  For instance, the problem can be restricted to 2 dimensions, or
-  it can ignore the effect of temperature (or pressure) on the material
-  properties, etc.}  
-
-\plt{The scope section is related to the assumptions section
-  (Section~\ref{sec_assumpt}).  However, the scope and the assumptions are not
-  at the same level of abstraction.  The scope is at a high level.  The focus is
-  on the ``big picture'' assumptions.  The assumptions section lists, and
-  describes, all of the assumptions.}
-
-\plt{The scope section is relevant for later determining typical values of inputs. The scope should make it clear what inputs are reasonable to expect. This is a distinction between scope and context (context is a later section).  Scope affects the inputs while context affects how the software will be used.}
+The implementation will primarily address noise reduction and basic filtering,
+without delving into advanced techniques like iterative reconstruction or
+machine learning-based enhancements. The software assumes uniform spacing
+between projection angles and consistent image resolution.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
-
-\plt{This section summarizes the skills and knowledge of the readers of the
-  SRS.  It does NOT have the same purpose as the ``User Characteristics''
-  section (Section~\ref{SecUserCharacteristics}).  The intended readers are the
-  people that will read, review and maintain the SRS.  They are the people that
-  will conceivably design the software that is intended to meet the
-  requirements.  The user, on the other hand, is the person that uses the
-  software that is built.  They may never read this SRS document.  Of course,
-  the same person could be a ``user'' and an ``intended reader.''}
-
-\plt{The intended reader characteristics should be written as unambiguously and
-  as specifically as possible.  Rather than say, the user should have an
-  understanding of physics, say what kind of physics and at what level.  For
-  instance, is high school physics adequate, or should the reader have had a
-  graduate course on advanced quantum mechanics?}
+The intended readers of this document are individuals involved in the development,
+review, and maintenance of the FBP tool for CT image reconstruction. These
+readers are expected to have a basic understanding of computed tomography
+principles and image processing techniques such as Fourier transforms, Random
+transforms, linear algebra and Python.
 
 \subsection{Organization of Document}
+The introduction section (Section~\ref{introduction}) provides an overview of
+the project, including the purpose, scope, and intended audience for this
+document. The General System Description (Section~\ref{general description}) outlines
+the context and high-level requirements of the system. Detailed problem
+definitions, theoretical foundations, and specific system functionalities are
+described in the Specific System Description (Section~\ref{specific description}). The
+Requirements section (Section~\ref{requirement}) specifies both functional
+and non-functional requirements. The document concludes with an overview of
+potential changes and their implications for future development.
 
-\plt{This section provides a roadmap of the SRS document.  It will help the
-  reader orient themselves.  It will provide direction that will help them
-  select which sections they want to read, and in what order.  This section will
-  be similar between project.}
-
-\section{General System Description}
+\section{General System Description} \label{general description}
 
 This section provides general information about the system.  It identifies the
 interfaces between the system and its environment, describes the user
@@ -491,7 +496,7 @@ automotive hazard analyses.}
   abstraction is relaxed here.  However, system constraints should only be
   included if they are truly required.}
 
-\section{Specific System Description}
+\section{Specific System Description} \label{specific description}
 
 This section first presents the problem description, which gives a high-level
 view of the problem to be solved.  This is followed by the solution characteristics
@@ -1045,7 +1050,7 @@ A correct solution must exhibit \plt{fill in the details}.  \plt{These
   validation.  Those topics will be addressed in the Verification and Validation
   plan.}
 
-\section{Requirements}
+\section{Requirements} \label{requirement}
 
 \plt{The requirements refine the goal statement.  They will make heavy use of
   references to the instance models.}
