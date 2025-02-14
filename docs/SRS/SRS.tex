@@ -1027,19 +1027,16 @@ qualities that the software is expected to exhibit.
   data, and ensure that intensity values are normalized between 0 and 1 (from
   IM\ref{IM1} and IM\ref{IM2}).
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R2}:] The system must perform log
-  transformation on intensity values to obtain projection data, ensuring linear
-  attenuation and consistency with the Radon Transform (from IM\ref{IM1} and IM\ref{IM2}).
+\item[R\refstepcounter{reqnum}\thereqnum \label{R2}:] The system must allow users
+  to select a filtering method, choosing between the Ramp and Shepp-Logan
+  filters. (from IM\ref{IM1} and IM\ref{IM2})
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R3}:] The system must implement
-  Fourier filtering using either a Ramp or Shepp-Logan filter (from IM\ref{IM1} and IM\ref{IM2}).
-
-\item[R\refstepcounter{reqnum}\thereqnum \label{R4}:] The system must perform the
+\item[R\refstepcounter{reqnum}\thereqnum \label{R3}:] The system must perform the
   back-projection over all projection angles to reconstruct the attenuation
   coefficient after filtering (from IM\ref{IM1} and IM\ref{IM2}).
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R5}:] The reconstructed attenuation
-  values must be non-negative and consistent with input projections.
+%\item[R\refstepcounter{reqnum}\thereqnum \label{R4}:] The reconstructed attenuation
+%  values must be non-negative and consistent with input projections.
 \end{itemize}
 
 \subsection{Nonfunctional Requirements}
@@ -1171,17 +1168,15 @@ the assumptions.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-           & \iref{IM1} & \iref{IM2} & \rref{R1} & \rref{R2} & \rref{R3} & \rref{R4} & \rref{R5} \\
+           & \iref{IM1} & \iref{IM2} & \rref{R1} & \rref{R2} & \rref{R3}   \\
 \hline
-\iref{IM1} &            &            &    X      &    X      &    X      &   X       &           \\ \hline
-\iref{IM2} &            &            &    X      &    X      &    X      &   X       &           \\ \hline
-\rref{R1}  &      X     &     X      &           &           &           &           &           \\ \hline
-\rref{R2}  &      X     &     X      &           &           &           &           &           \\ \hline
-\rref{R3}  &      X     &     X      &           &           &           &           &           \\ \hline
-\rref{R4}  &      X     &     X      &           &           &           &           &           \\ \hline
-\rref{R5}  &            &            &           &           &           &           &           \\ \hline
+\iref{IM1} &            &            &    X      &    X      &    X        \\ \hline
+\iref{IM2} &            &            &    X      &    X      &    X        \\ \hline
+\rref{R1}  &      X     &     X      &           &           &             \\ \hline
+\rref{R2}  &      X     &     X      &           &           &             \\ \hline
+\rref{R3}  &      X     &     X      &           &           &             \\ \hline
 \end{tabular}
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
 \label{Table:R_trace}

@@ -17,13 +17,12 @@
 
 \begin{document}
 
-\title{System Verification and Validation Plan for \progname{}} 
+\title{System Verification and Validation Plan for \progname{}}
 \author{\authname}
 \date{\today}
-	
 \maketitle
 
-\pagenumbering{roman}
+\upagenumbering{roman}
 
 \section*{Revision History}
 
@@ -65,10 +64,10 @@ in.}
 \section{Symbols, Abbreviations, and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
+\begin{tabular}{l l}
+  \toprule
   \textbf{symbol} & \textbf{description}\\
-  \midrule 
+  \midrule
   T & Test\\
   \bottomrule
 \end{tabular}\\
@@ -88,9 +87,12 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 \section{General Information}
 
 \subsection{Summary}
-
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+This document reviews the verification and validation plan for Filtered Back
+Projection (FBP) CT Image Reconstruction. The FBP method is used to reconstruct
+cross-sectional images from projection data collected in CT scans. The accuracy
+and performance of the reconstruction process are evaluated based on predefined
+validation criteria. The system’s usability, maintainability, and reliability
+are also assessed using user inputs and experimental results.
 
 \subsection{Objectives}
 
@@ -100,15 +102,15 @@ This document ... \wss{provide an introductory blurb and roadmap of the
   ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
   just those that are most important.}
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
+\wss{You should also list the objectives that are out of scope.  You don't have
+the resources to do everything, so what will you be leaving out.  For instance,
+if you are not going to verify the quality of usability, state this.  It is also
 worthwhile to justify why the objectives are left out.}
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
+\wss{The objectives are important because they highlight that you are aware of
+limitations in your resources for verification and validation.  You can't do everything,
+so what are you going to prioritize?  As an example, if your system depends on an
+external library, you can explicitly state that you will assume that external library
 has already been verified by its implementation team.}
 
 \subsection{Challenge Level and Extras}
@@ -137,52 +139,91 @@ Repos.csv) if your plan changes as a result of the VnV planning exercise.}
 
 \citet{SRS}
 
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
+\wss{Don't just list the other documents.  You should explain why they are relevant and
 how they relate to your VnV efforts.}
 
 \section{Plan}
+This section describes the verification and validation plan for the
+\progname.The planning starts with the verification and validation team in
+Section \ref{3.1}, followed by the SRS verification plan (Section \ref{3.2}),
+design verification plan (Section \ref{3.3}), verification and validation
+verification plan (Section \ref{3.4}), implementation verification plan (Section
+\ref{3.5}), Automated testing and verification tools (Section \ref{3.6}), and
+Software validation plan (Section \ref{3.7}).
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+\subsection{Verification and Validation Team} \label{3.1}
+\begin{center}
+\begin{table}[h]
+\resizebox{\textwidth}{ %
+    \begin{tabular}{ |l|l|p{2cm}|p{5cm}| }
+    \hline
+    \textbf{Name} & \textbf{Document} & \textbf{Role} & \textbf{Description} \\
+    \hline
+     Dr. Spencer Smith & All & Instructor/ Reviewer & Review the documents, design and documentation style. \\
+     \hline
+     Qianlin Chen & All & Author & Create and manage all documentation, develop the VnV plan, conduct VnV testing, and verify the implementation.\\
+     \hline
+     Xunzhou Ye & All & Domain Expert Reviewer & Review all the documents. \\
+    \hline
+    \end{tabular} %
+}
+\caption{Verification and validation team}
+\label{vnvteam}
+\end{table}
+\end{center}
 
-\subsection{Verification and Validation Team}
+\subsection{SRS Verification Plan} \label{3.2}
+The SRS document for \progname will be verified using a structured review
+process. The verification plan consists of the following steps:
+\begin{description}
+\item[Initial Review] \hfill \\
+  Assigned reviewers, instructor (Dr. Smith) and domain expert
+  (Xunzhou). will conduct a manual review of the SRS document. In this step, a
+  structured
+  \href{https://github.com/smiths/capTemplate/blob/9251702fdcb9800c59f6ed3d11d91e2bd62fca6d/docs/Checklists/SRS-Checklist.pdf}{SRS
+    Checklist} will be used to systematically evaluate key aspects such as
+  requirement completeness, consistency, feasibility, and traceability.
+\item[Issue Tracking] \hfill \\
+  eviewers will provide feedback by documenting identified issues in an issue
+  tracker (GitHub Issues). Each issue will be
+  assigned to the document owner for later revision.
+\item[Revision] \hfill \\
+  The document owner will address reported issues by making necessary
+  modifications to the SRS. Any unresolved or disputed concerns will be
+  discussed among the reviewers.
+\item[Final Documentation] \hfill \\
+  After revisions, a final review will be conducted to confirm that all
+  identified issues have been adequately addressed.
+\end{description}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
 
-\subsection{SRS Verification Plan}
+\subsection{Design Verification Plan} \label{3.3} The design documentation,
+including the Module Guide (MG) and Module Interface Specification (MIS), will
+be reviewed to ensure accuracy and completeness. The verification process will
+involve a static analysis approach, where assigned reviewers will inspect the
+documents to confirm that they align with system requirements and architectural
+design principles. Reviewers will provide feedback through an issue-tracking
+system, allowing the document owner to address concerns systematically. \\
+A structured
+\href{https://github.com/smiths/capTemplate/blob/9251702fdcb9800c59f6ed3d11d91e2bd62fca6d/docs/Checklists/MG-Checklist.pdf}{MG
+  Checklist} and
+\href{https://github.com/smiths/capTemplate/blob/9251702fdcb9800c59f6ed3d11d91e2bd62fca6d/docs/Checklists/MIS-Checklist.pdf}{MIS
+  Checklist} will be used to ensure consistency, correctness, and traceability.
+The finalized documents will be reviewed again to validate that all identified
+issues have been resolved.
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+\subsection{Verification and Validation Plan Verification Plan} \label{3.4} The
+review process for Verification and Validation (VnV) Plan will involve assigned
+team members in Table \ref{vnvteam} conducting a structured inspection to verify that the plan aligns
+with project requirements and verification strategies.
+Identified issues will be documented in an issue-tracking system for resolution.\\
+A
+\href{https://github.com/smiths/capTemplate/blob/9251702fdcb9800c59f6ed3d11d91e2bd62fca6d/docs/Checklists/VnV-Checklist.pdf}{VnV
+  Checklist} will be used to assess key aspects of the plan, including coverage
+of testing methodologies and traceability of requirements. The final review will
+confirm that all necessary corrections have been implemented before approval.
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
-
-\wss{Maybe create an SRS checklist?}
-
-\subsection{Design Verification Plan}
-
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
-
-\subsection{Verification and Validation Plan Verification Plan}
-
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
-
-\subsection{Implementation Verification Plan}
+\subsection{Implementation Verification Plan} \label{3.5}
 
 \wss{You should at least point to the tests listed in this document and the unit
   testing plan.}
@@ -195,24 +236,37 @@ verified.  Techniques for this include review and mutation testing.}
 walkthrough.  There is also a possibility of using the final presentation (in
 CAS741) for a partial usability survey.}
 
-\subsection{Automated Testing and Verification Tools}
+\subsection{Automated Testing and Verification Tools} \label{3.6} To ensure the
+correctness and efficiency of the \progname, the following automated
+testing and verification tools will be utilized:
+\begin{description}
+\item[Unit Testing] \hfill \\
+  \href{https://docs.pytest.org/en/stable/}{pytest} will be used to test
+  individual functions, such as backprojection and filtering operations, to
+  verify that they produce the expected output given test input data.
+\item[Performance Analysis] \hfill \\
+  \href{https://docs.python.org/3/library/profile.html#module-cprofile}{cProfill}
+  will analyze execution time and identify performance bottlenecks in
+  computationally intensive functions like fourier transforms and interpolation.
+\item[Static Analysis] \hfill \\
+  \href{https://flake8.pycqa.org/en/latest/}{flake8} will enforce python code
+  standards, ensuring maintainability and readability.
+\item[Test Coverage] \hfill \\
+  \href{https://coverage.readthedocs.io/en/7.6.12/}{coverage.py} will measure
+  test coverage to ensure that all critical functions are tested and validated
+  against various datasets.
+\item[Visualization] \hfill \\
+  \href{https://matplotlib.org/}{matplotlib} will be used to visualize sinograms
+  and reconstructed images, allowing for manual verification of reconstruction
+  accuracy.
+\end{description}
+Continuous Integration (CI) tools are unnecessary for this project since it does
+not require automated builds, tests, or deployments like a web application.
+Additionally, visual verification is crucial for image reconstruction, and CI
+automation cannot replace the need for manual inspection of reconstructed
+images.
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
-
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
-
-\subsection{Software Validation Plan}
+\subsection{Software Validation Plan} \label{3.7}
 
 \wss{If there is any external data that can be used for validation, you should
   point to it here.  If there are no plans for validation, you should state that
@@ -222,12 +276,12 @@ that document.}
 the requirements document captures the right requirements.  Maybe task based
 inspection?}
 
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
+\wss{For those capstone teams with an external supervisor, the Rev 0 demo should
+be used as an opportunity to validate the requirements.  You should plan on
+demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.
 The feedback from your supervisor will be very useful for improving your project.}
 
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
+\wss{For teams without an external supervisor, user testing can serve the same purpose
 as a Rev 0 demo for the supervisor.}
 
 \wss{This section might reference back to the SRS verification section.}
@@ -238,58 +292,65 @@ as a Rev 0 demo for the supervisor.}
 the contents of the subsections.}
 
 \subsection{Tests for Functional Requirements}
+The functional requirements are divided into input and output
+tests. \\
+R1 correspond to input-related tests, ensuring that the system
+correctly processes input images, projection data, and transformations.\\
+R2 and R3 correspond to output-related tests, verifying the correctness of
+Fourier filtering, back-projection, and reconstructed attenuation values.\\
+While R3 operate on transformed projection data, it should be considered
+output-related because they primarily contribute to intermediate and final
+outputs of the reconstruction process, rather than defining new inputs.
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+\wss{Subsets of
+  the tests may be in related, so this section is divided into different areas.
+  If there are no identifiable subsets for the tests, this level of document
+  structure can be removed.}
 
 \wss{Include a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.}
 
-\subsubsection{Area of Testing1}
+\subsubsection{Input Tests}
 
 \wss{It would be nice to have a blurb here to explain why the subsections below
   cover the requirements.  References to the SRS would be good here.  If a section
   covers tests for input constraints, you should reference the data constraints
   table in the SRS.}
-		
-\paragraph{Title for Test}
 
+\paragraph{Test for Input - Intensity Values}
 \begin{enumerate}
+\item{test-input-intensity-id1}
+\begin{description}
+\item[Control:] Automatic
 
-\item{test-id1\\}
+\item[Initial State:] System is ready to accept a 2-D grayscale image for Radon Transform.
 
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
+\item[Input:] A 2-D NumPy array (M by N matrix), where:
+\begin{itemize}
+    \item Number of row (M): Number of detector positions
+    \item Number of column (N): Number of projection angles.
+    \item Value in the matrix: X-ray intensity measurements, normalized between
+      0 and 1.
+\end{itemize}
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+\item[Output:] A valid 2-D matrix array (M by N matrix), where:
+\begin{itemize}
+    \item Number of row (M): Number of detector positions
+    \item Number of column (N): Number of projection angles.
+    \item Value in the matrix: Represent integrated projection data, between 0 and 1.
+\end{itemize}
 
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+\item[Test Case Derivation:] This test ensures that the system correctly accepts a
+valid grayscale 2D input image, applies the Radon Transform, and produces a
+valid sinogram matrix. \\
+The system should return an output that maintains consistency in shape and
+correctly reflects the values after applying the log transform.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{}
 
 ...
 
@@ -317,7 +378,7 @@ How will they be done?  In cases like code (or document) walkthroughs, who will
 be involved? Be specific.}
 
 \subsubsection{Area of Testing1}
-		
+
 \paragraph{Title for Test}
 
 \begin{enumerate}
@@ -325,26 +386,26 @@ be involved? Be specific.}
 \item{test-id1\\}
 
 Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
+
+Initial State:
+
+Input/Condition:
+
+Output/Result:
+
+How test will be performed:
+
 \item{test-id2\\}
 
 Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+
+Initial State:
+
+Input:
+
+Output:
+
+How test will be performed:
 
 \end{enumerate}
 
@@ -363,14 +424,14 @@ How test will be performed:
   document) has been completed.}
 
 \wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
+philosophy for test case selection.}
 
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
+\wss{To save space and time, it may be an option to provide less detail in this section.
+For the unit tests you can potentially layout your testing strategy here.  That is, you
+can explain how tests will be selected for each module.  For instance, your test building
+approach could be test cases for each access program, including one test for normal behaviour
+and as many tests as needed for edge cases.  Rather than create the details of the input
+and output here, you could point to the unit testing code.  For this to work, you code
 needs to be well-documented, with meaningful names for all of the tests.}
 
 \subsection{Unit Testing Scope}
@@ -400,34 +461,34 @@ needs to be well-documented, with meaningful names for all of the tests.}
 
 Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
   be automatic}
-					
-Initial State: 
-					
-Input: 
-					
+
+Initial State:
+
+Input:
+
 Output: \wss{The expected result for the given inputs}
 
 Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
-					
+How test will be performed:
+
 \item{test-id2\\}
 
 Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
   be automatic}
-					
-Initial State: 
-					
-Input: 
-					
+
+Initial State:
+
+Input:
+
 Output: \wss{The expected result for the given inputs}
 
 Test Case Derivation: \wss{Justify the expected value given in the Output field}
 
-How test will be performed: 
+How test will be performed:
 
 \item{...\\}
-    
+
 \end{enumerate}
 
 \subsubsection{Module 2}
@@ -444,33 +505,33 @@ How test will be performed:
   mentioned functional tests.}
 
 \subsubsection{Module ?}
-		
+
 \begin{enumerate}
 
 \item{test-id1\\}
 
 Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
   be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
+
+Initial State:
+
+Input/Condition:
+
+Output/Result:
+
+How test will be performed:
+
 \item{test-id2\\}
 
 Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+
+Initial State:
+
+Input:
+
+Output:
+
+How test will be performed:
 
 \end{enumerate}
 
@@ -481,7 +542,7 @@ How test will be performed:
 \subsection{Traceability Between Test Cases and Modules}
 
 \wss{Provide evidence that all of the modules have been considered.}
-				
+
 \bibliographystyle{plainnat}
 
 \bibliography{../../refs/References}
@@ -512,7 +573,7 @@ graduate attribute of Lifelong Learning.
 \input{../Reflection.tex}
 
 \begin{enumerate}
-  \item What went well while writing this deliverable? 
+  \item What went well while writing this deliverable?
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?
   \item What knowledge and skills will the team collectively need to acquire to
