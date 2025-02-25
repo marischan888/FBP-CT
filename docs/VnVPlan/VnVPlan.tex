@@ -11,9 +11,16 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{tikz}
 
 \input{../Comments}
 \input{../Common}
+
+\newcounter{testnum}
+\newcommand{\dthetestnum}{id\thetestnum}
+\newcommand{\tref}[1]{id\ref{#1}}
 
 \begin{document}
 
@@ -22,42 +29,27 @@
 \date{\today}
 \maketitle
 
-\upagenumbering{roman}
+\pagenumbering{roman}
 
 \section*{Revision History}
 
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Feb 24, 2025 & 1.0 & Initial VnV\\
+... & ... & ...\\
 \bottomrule
 \end{tabularx}
 
 ~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
-
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
 
 \newpage
 
 \tableofcontents
 
 \listoftables
-\wss{Remove this section if it isn't needed}
 
-\listoffigures
-\wss{Remove this section if it isn't needed}
+%\listoffigures
 
 \newpage
 
@@ -68,23 +60,35 @@ in.}
   \toprule
   \textbf{symbol} & \textbf{description}\\
   \midrule
-  T & Test\\
+  MG & Module Guide \\
+  MIS & Module Interface Specification \\
+  SRS & Software Requirement Specification\\
+  FBP & Filter Back Projection \\
+  TC & Test Case \\
+  VnV & Verification and Validation \\
   \bottomrule
 \end{tabular}\\
 
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+For complete symbols used within the system, please refer the section 1 in
+  \href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/SRS/SRS.pdf}{SRS}
+  document.
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
+This document outlines the VnV plan for FBP CT Image Reconstruction, ensuring compliance with
+functional and non-functional requirements through systematic verification and
+testing. It begins with General Information (Section~\ref{sec2}), covering objectives and
+relevant documentation, followed by the VnV Plan (Section~\ref{sec3}), which details team
+responsibilities, SRS and design verification, and automated testing tools.
+System Tests (Section~\ref{sec4}) validate functional and non-functional requirements,
+including input and output tests, with traceability ensuring full requirement
+coverage. Lastly, Unit Test Description (Section~\ref{sec5}) defines the testing scope,
+module-specific functional and non-functional tests, and the mapping of test
+cases to system components.
 
-\section{General Information}
+\section{General Information} \label{sec2}
 
 \subsection{Summary}
 This document reviews the verification and validation plan for Filtered Back
@@ -95,54 +99,46 @@ validation criteria. The system’s usability, maintainability, and reliability
 are also assessed using user inputs and experimental results.
 
 \subsection{Objectives}
+The purpose of the validation plan is to define how system validation will
+perform at the end of the project. The strategy will use to assess whether the
+developed system accomplishes the design goals. Also, the verification plan
+includes test strategies, definitions of what will be tested, and a test matrix
+with detailed mapping connecting the tests performed to the system
+requirements.
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
-
-\wss{You should also list the objectives that are out of scope.  You don't have
-the resources to do everything, so what will you be leaving out.  For instance,
-if you are not going to verify the quality of usability, state this.  It is also
-worthwhile to justify why the objectives are left out.}
-
-\wss{The objectives are important because they highlight that you are aware of
-limitations in your resources for verification and validation.  You can't do everything,
-so what are you going to prioritize?  As an example, if your system depends on an
-external library, you can explicitly state that you will assume that external library
-has already been verified by its implementation team.}
+Due to resource constraints, validation will be limited to
+peer-based testing for accuracy and usability. While this ensures basic
+functionality and user experience evaluation, the absence of domain experts,
+such as doctors or researchers, prevents validation in real-world clinical or
+research applications.
 
 \subsection{Challenge Level and Extras}
+The challenge level for this project is classified as general, requiring a
+rigorous verification and validation process to ensure the accuracy and
+performance of the system. The validation plan includes extensive functional and non-functional
+testing, leveraging automated tools, formal proofs, and usability evaluations to
+assess correctness, efficiency, and maintainability.
 
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
+Additionally, this project incorporates code walkthroughs, user documentation,
+and design reviews to enhance system reliability and comprehensibility. The
+scope of validation covers core algorithmic accuracy while excluding external
+dependencies, which are assumed to be pre-validated. This structured approach
+ensures that the system meets its defined performance, usability, and
+verification requirements while adhering to resource constraints.
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
 
 \subsection{Relevant Documentation}
+The relevant documentation for the VnV includes
+\href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/ProblemStatementAndGoals/ProblemStatement.pdf}{Problem
+  Statement} which identifies the proposed idea,
+\href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/SRS/SRS.pdf}{System
+  Requirements Specifications} which provides information about the requirement
+of the proposed system, VnV Report for validation and verification, MG and MIS
+design documents for unit testing (found in
+\href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/tree/main/docs/Design}{Github
+  Repository}).
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
-
-\citet{SRS}
-
-\wss{Don't just list the other documents.  You should explain why they are relevant and
-how they relate to your VnV efforts.}
-
-\section{Plan}
+\section{Plan} \label{sec3}
 This section describes the verification and validation plan for the
 \progname.The planning starts with the verification and validation team in
 Section \ref{3.1}, followed by the SRS verification plan (Section \ref{3.2}),
@@ -154,7 +150,6 @@ Software validation plan (Section \ref{3.7}).
 \subsection{Verification and Validation Team} \label{3.1}
 \begin{center}
 \begin{table}[h]
-\resizebox{\textwidth}{ %
     \begin{tabular}{ |l|l|p{2cm}|p{5cm}| }
     \hline
     \textbf{Name} & \textbf{Document} & \textbf{Role} & \textbf{Description} \\
@@ -166,7 +161,6 @@ Software validation plan (Section \ref{3.7}).
      Xunzhou Ye & All & Domain Expert Reviewer & Review all the documents. \\
     \hline
     \end{tabular} %
-}
 \caption{Verification and validation team}
 \label{vnvteam}
 \end{table}
@@ -225,16 +219,22 @@ confirm that all necessary corrections have been implemented before approval.
 
 \subsection{Implementation Verification Plan} \label{3.5}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
-
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
-
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+\begin{itemize}
+\item Static Verification:
+  \begin{itemize}
+      \item Code Walkthrough: A structured review process where team members
+        manually inspect the code for correctness, maintainability, and
+        adherence to design specifications. This process ensures that critical
+        components meet functional requirements before execution.
+  \end{itemize}
+  \item Dynamic Verification:
+    \begin{itemize}
+      \item Unit Testing: All test cases outlined in Section~\ref{sec5} will
+        be executed, covering both functional and non-functional requirements.
+        These tests ensure correctness at the module and system levels,
+        validating reconstruction accuracy and computational efficiency.
+      \end{itemize}
+  \end{itemize}
 
 \subsection{Automated Testing and Verification Tools} \label{3.6} To ensure the
 correctness and efficiency of the \progname, the following automated
@@ -260,165 +260,378 @@ testing and verification tools will be utilized:
   and reconstructed images, allowing for manual verification of reconstruction
   accuracy.
 \end{description}
-Continuous Integration (CI) tools are unnecessary for this project since it does
-not require automated builds, tests, or deployments like a web application.
-Additionally, visual verification is crucial for image reconstruction, and CI
-automation cannot replace the need for manual inspection of reconstructed
-images.
+Continuous Integration (CI) tools will be Github Action. Tools for
+\href{https://github.com/marketplace/actions/run-pytest}{unit testing},
+\href{https://github.com/marketplace/actions/flake8-action}{static analysis} can
+run automatically.
 
-\subsection{Software Validation Plan} \label{3.7}
+\subsection{Software Validation Plan} \label{3.7} Currently, there are no
+external datasets or domain experts available to validate the FBP CT Image
+Reconstruction system. Since the system is not yet in real-world use and lacks
+access to researcher for review, formal validation cannot be conducted at this
+stage.
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+However, internal review sessions may be used to ensure that the system
+aligns with specified requirements. Future validation efforts could include
+structured user testing or a Rev 0 demo if external stakeholders become
+available. Until then, verification efforts will focus on functional correctness
+through testing, as outlined in the SRS verification section.
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
 
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should
-be used as an opportunity to validate the requirements.  You should plan on
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.
-The feedback from your supervisor will be very useful for improving your project.}
+\section{System Tests} \label{sec4} This section outlines the testing framework
+for verifying the system, covering both functional and non-functional
+requirements. Section~\ref{TFR} details functional tests, including input tests
+(\ref{output_test}) to validate data preprocessing and output tests
+(\ref{input_test}) to assess reconstructed image accuracy. Section~\ref{TNFR}
+focuses on non-functional testing, such as performance and usability
+evaluations. Finally, Section~\ref{trace1} ensures traceability between test cases and
+system requirements, maintaining comprehensive coverage and validation of the
+system’s expected behavior.
 
-\wss{For teams without an external supervisor, user testing can serve the same purpose
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
-
-\section{System Tests}
-
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
-
-\subsection{Tests for Functional Requirements}
-The functional requirements are divided into input and output
+\subsection{Tests for Functional Requirements} \label{TFR}
+The functional requirements in \href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/SRS/SRS.pdf}{SRS} are divided into input and output
 tests. \\
-R1 correspond to input-related tests, ensuring that the system
-correctly processes input images, projection data, and transformations.\\
-R2 and R3 correspond to output-related tests, verifying the correctness of
-Fourier filtering, back-projection, and reconstructed attenuation values.\\
-While R3 operate on transformed projection data, it should be considered
-output-related because they primarily contribute to intermediate and final
-outputs of the reconstruction process, rather than defining new inputs.
+R1 and R2 correspond to input-related tests, ensuring that the system
+correctly processes input images, projection data, and transformations. The
+tests for R1 and R2 are in the Section \ref{input_test} \\
+R3 correspond to output-related tests, verifying the correctness of
+Fourier filtering, back-projection, and reconstructed attenuation values. The
+test for the R3 is in the Section \ref{output_test} \\
 
-\wss{Subsets of
-  the tests may be in related, so this section is divided into different areas.
-  If there are no identifiable subsets for the tests, this level of document
-  structure can be removed.}
+\subsubsection{Input Tests} \label{input_test}
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
-
-\subsubsection{Input Tests}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-
-\paragraph{Test for Input - Intensity Values}
+\paragraph{Test for Input - 2D grayscale image}
+% Add reference for the input
 \begin{enumerate}
-\item{test-input-intensity-id1}
+\item{test-input-image-\refstepcounter{testnum} \label{id1}\dthetestnum}
 \begin{description}
 \item[Control:] Automatic
 
-\item[Initial State:] System is ready to accept a 2-D grayscale image for Radon Transform.
+\item[Initial State:] Pending Input.
 
-\item[Input:] A 2-D NumPy array (M by N matrix), where:
-\begin{itemize}
-    \item Number of row (M): Number of detector positions
-    \item Number of column (N): Number of projection angles.
-    \item Value in the matrix: X-ray intensity measurements, normalized between
-      0 and 1.
-\end{itemize}
+\item[Input:] \hfill \\
+  \begin{itemize}
+  \item A 2-D array represents the intensity measurements in different projection
+    angles. Sample data input can be found in
+    \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+      Image Archive} under the title \lq Images Phantom Object Only\rq.
+  \item  The projection angles in degrees. In this test, a range of 180 angles from 0 to
+    179 degrees is used.
+  \end{itemize}
 
-\item[Output:] A valid 2-D matrix array (M by N matrix), where:
-\begin{itemize}
-    \item Number of row (M): Number of detector positions
-    \item Number of column (N): Number of projection angles.
-    \item Value in the matrix: Represent integrated projection data, between 0 and 1.
-\end{itemize}
+\item[Output:] A 2-D array represents the Sinogram. The result for the input data
+  can be found in
+  \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+    Image Archive} under the title \lq Clinical Data\rq.
 
 \item[Test Case Derivation:] This test ensures that the system correctly accepts a
-valid grayscale 2D input image, applies the Radon Transform, and produces a
-valid sinogram matrix. \\
-The system should return an output that maintains consistency in shape and
-correctly reflects the values after applying the log transform.
+  valid grayscale 2D input image, applies the Radon Transform, and produces a
+  valid sinogram matrix. \\
+  The system should return an output that maintains consistency in shape and
+  correctly reflects the values after applying the Radon Transform.
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
 \end{enumerate}
 
-\subsubsection{}
+\paragraph{Test for Input - filter type}
+% Add a table, given all input and their expected output
 
-...
+\begin{enumerate}
+\item{test-input-filter-type-\refstepcounter{testnum} \label{id2} \dthetestnum}
+\begin{description}
+\item[Control:] Automatic
 
-\subsection{Tests for Nonfunctional Requirements}
+\item[Initial State:] System has generated the sinogram matrix and the user is
+  ready to select the ramp filter.
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+\item[Input:] Shepp-logan filter type and the size of sinogram in the Table\ref{TableA}.
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
+\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
+\item[Test Case Derivation:] \hfill \\
+  This test ensures that the system correctly processes
+  user-selected filter types.\\
+  A valid ramp filter should be applied as expected, modifying the sinogram
+  by filtering out the low frequency.
 
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{enumerate}
 
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
+\begin{enumerate}
+\item{test-input-filter-type-\refstepcounter{testnum} \label{id3} \dthetestnum}
+\begin{description}
+\item[Control:] Automatic
 
-\subsubsection{Area of Testing1}
 
-\paragraph{Title for Test}
+\item[Initial State:] System has generated the sinogram matrix and the user is
+  ready to select the ramp filter.
+
+\item[Input:] Shepp-logan filter type and the size of sinogram in the Table\ref{TableA}.
+
+\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
+
+\item[Test Case Derivation:] \hfill \\
+  This test ensures that the system correctly processes
+  user-selected filter types.\\
+  A valid shepp-logan filter should be applied as expected, modifying the
+  sinogram by filtering out the high frequency.
+
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{enumerate}
+
+\begin{enumerate}
+\item{test-input-invalid-filter-type-\refstepcounter{testnum} \label{id4} \dthetestnum}
+\begin{description}
+\item[Control:] Automatic
+
+
+\item[Initial State:] System has generated the sinogram matrix and the user is
+  ready to select the ramp filter.
+
+\item[Input:] No filter type and the size of sinogram in the Table\ref{TableA}.
+
+\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
+
+\item[Test Case Derivation:] \hfill \\
+  This test ensures that the system correctly processes
+  user-selected filter types.\\
+  A valid shepp-logan filter should be applied as expected, modifying the
+  sinogram by filtering out the high frequency.
+
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{enumerate}
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\linewidth}{|X|X|X|}
+    \hline
+    Test Id                                  & Input                                            & Expected Output                                                                                                                             \\
+    \hline
+    test-input-filter-type-id\ref{id2}         & Filter Type: ramp (str); Sinogram size: 10 (int)  & 1-D array represent ramp filter variable: [0.0, 0.314159, 0.628318, 0.942477, 1.256636, 1.570796, 1.256636, 0.942477, 0.628318, 0.314159] \\ \hline
+    test-input-filter-type-id\ref{id3}         & Filter Type: shepp (str); Sinogram size: 10 (int) & 1-D array represent shepp-logan filter variable: [0.0, 0.2984, 0.5630, 0.7958, 0.9817, 1.0986, 0.9817, 0.7958, 0.5630, 0.2984]            \\ \hline
+    test-input-invalid-filter-type-id\ref{id4} & anything other than ramp and shepp               & None                                                                                                                                        \\ \hline
+  \end{tabularx}
+  \caption{The inputs and outputs for filter tests}
+  \label{TableA}
+\end{table}
+
+
+\subsubsection{Output Tests}\label{output_test}
+\paragraph{Test for Output - attenuation}
+\begin{enumerate}
+\item{test-output-attenuation-\refstepcounter{testnum} \label{id5} \dthetestnum}
+\begin{description}
+\item[Control:] Automatic
+
+\item[Initial State:] The system is ready to perform back-projection on a given
+  sinogram and filter type.
+
+\item[Input:] A sinogram and the ramp filter in the Table \ref{Table B}.
+
+\item[Output:] A 2-D array that represent the reconstructed attenuation in the
+  Table\ref{Table B}.
+
+\item[Test Case Derivation:] This test ensures that the system correctly applies the back-projection process to reconstruct an image from a given sinogram. The test verifies that the output maintains the expected shape and that the reconstructed attenuation values correctly represent the original structure.
+
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{enumerate}
+
+\begin{enumerate}
+\item{test-output-attenuation-\refstepcounter{testnum} \label{id6} \dthetestnum}
+\begin{description}
+\item[Control:] Automatic
+
+\item[Initial State:] The system is ready to perform back-projection on a given
+  sinogram and filter type.
+
+\item[Input:] A sinogram and the shepp-logan filter in the Table \ref{Table B}.
+
+\item[Output:] A 2-D array that represent the reconstructed attenuation in the
+  Table\ref{Table B}.
+
+\item[Test Case Derivation:] This test ensures that the system correctly applies the back-projection process to reconstruct an image from a given sinogram. The test verifies that the output maintains the expected shape and that the reconstructed attenuation values correctly represent the original structure.
+
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{enumerate}
+
+
+\begin{table}[H]
+  \centering
+  \begin{tabularx}{\linewidth}{|X|X|X|}
+    \hline
+    Test Id                                  & Input                                            & Expected Output                                                                                                                             \\
+    \hline
+    test-output-attenuation-id\ref{id5}         & Sinogram can be found in
+                                                   \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+                                                   Image Archive} under the
+                                                   title \lq Clinical
+                                                   Data\rq; Filter Type:
+                                                   ramp (str); Output size:
+                                                   256 & Attenuation can be found in
+                                                   \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+                                                   Image Archive} under the
+                                                   title \lq Patients Report\rq \\ \hline
+    test-output-attenuation-id\ref{id6}         & Sinogram can be found in
+                                                       \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+                                                       Image Archive} under the
+                                                       title \lq Clinical
+                                                       Data\rq; Filter Type:
+                                                       shepp (str); Output size:
+                                                       256 & Attenuation can be found in
+                                                       \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
+                                                       Image Archive} under the
+                                                       title \lq Patients
+                                                             Report\rq \\ \hline
+  \end{tabularx}
+  \caption{The inputs and outputs for FBP tests}
+  \label{Table B}
+\end{table}
+\subsection{Tests for Nonfunctional Requirements} \label{TNFR}
+Nonfunctional requirements for FBP system are given in
+\href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/SRS/SRS.pdf}{SRS}
+Section 5.2.
+
+\paragraph{Test for Accuracy}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{test-accuracy-\refstepcounter{testnum} \label{id7} \dthetestnum\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
+Type: Functional, Dynamic.
 
-Initial State:
+Initial State: Reconstructed image is available.
 
-Input/Condition:
+Input/Condition: The reconstructed image and the corresponding ground truth image.
 
-Output/Result:
+Output/Result: Error margin (Mean Square Error) is computed and compared against the predefined tolerance level.
 
-How test will be performed:
-
-\item{test-id2\\}
-
-Type: Functional, Dynamic, Manual, Static etc.
-
-Initial State:
-
-Input:
-
-Output:
-
-How test will be performed:
+How test will be performed: The test will compare the reconstructed images with
+ground-truth images using metrics like Mean Squared Error (MSE). The relative
+error for each test case will be recorded and analyzed.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\paragraph{Test for Usability}
 
-...
+\begin{enumerate}
 
-\subsection{Traceability Between Test Cases and Requirements}
+\item{test-usability-\refstepcounter{testnum} \label{id8} \dthetestnum\\}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+Type: Manual.
 
-\section{Unit Test Description}
+Initial State: System interface is implemented. Usability survey in Section
+\ref{survey} is predefined.
+
+Input/Condition: Joe in Table \ref{vnvteam} perform tasks follows the survey.
+
+Output/Result: Feedback from usability survey, including ease of use, clarity of
+instructions, and efficiency of interaction.
+
+How test will be performed: A usability study will be conducted where users
+perform predefined tasks. Their experience will be recorded, and a survey will
+be provided to assess ease of use, with results summarized in a report.
+\end{enumerate}
+
+
+\paragraph{Test for Maintainability}
+
+\begin{enumerate}
+
+\item{test-maintainability-\refstepcounter{testnum} \label{id9} \dthetestnum\\}
+
+Type: Manual, Static.
+
+Initial State: System implementation is available.
+
+How test will be performed:\\
+To ensure the maintainability of the system, a structured code review process
+will be conducted. The review will focus on the clarity of documentation, ease of
+understanding the code structure, and the effort required for future
+modifications or enhancements.
+
+Additionally, maintainability will be assessed by tracking modification times
+for common updates, such as adding new filters or adjusting reconstruction
+parameters. If changes require excessive refactoring, recommendations for
+improving the code's modularity will be documented.
+
+The review will be conducted collaboratively, involving the assigned document
+reviewers listed in Table \ref{vnvteam}. The findings will be summarized in a
+Github Issue, outlining strengths and areas for improvement.
+\end{enumerate}
+
+\paragraph{Test for Portability}
+
+\begin{enumerate}
+
+\item{test-portability-\refstepcounter{testnum} \label{id10} \dthetestnum\\}
+
+Type: Functional, Dynamic.
+
+Initial State: The software is fully implemented.
+
+Input/Condition: Different operating systems (Windows, macOS, Linux).
+
+Output/Result: Verification that the system runs without errors across all tested platforms.
+
+How test will be performed: The software will be deployed and executed on
+multiple operating systems, ensuring it performs consistently without requiring
+additional setup.
+\end{enumerate}
+
+
+\paragraph{Test for Reusability}
+
+\begin{enumerate}
+
+\item{test-reusability-\refstepcounter{testnum} \label{id11} \dthetestnum\\}
+
+Type: Manual.
+
+Initial State: API is implemented and documented.
+
+Input/Condition: External developers in Table \ref{vnvteam} integrating a new filter beyond Ramp and Shepp-Logan.
+
+Output/Result: Confirmation that new filters can be added with minimal effort using the provided API.
+
+How test will be performed: Developers will attempt to add a new filter, and the
+time/effort required will be assessed. Documentation clarity and API flexibility
+will also be evaluated.
+\end{enumerate}
+
+\subsection{Traceability Between Test Cases and Requirements} \label{trace1}
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+  \tikz{\node[below left, inner sep=1pt] (test) {test};%
+      \node[above right,inner sep=1pt] (requirement) {requirement};%
+      \draw (test.north west|-requirement.north west) -- (test.south east-|requirement.south east);}
+            & R1 & R2 & R3 & NFR1 & NFR2 & NFR3 & NFR4 & NFR5 \\
+\hline
+\tref{id1}  & X  &    &    &      &      &      &      &      \\ \hline
+\tref{id2}  &    & X  &    &      &      &      &      &      \\ \hline
+\tref{id3}  &    & X  &    &      &      &      &      &      \\ \hline
+\tref{id4}  &    & X  &    &      &      &      &      &      \\ \hline
+\tref{id5}  &    &    & X  &      &      &      &      &      \\ \hline
+\tref{id6}  &    &    & X  &      &      &      &      &      \\ \hline
+\tref{id7}  &    &    &    & X    &      &      &      &      \\ \hline
+\tref{id8}  &    &    &    &      & X    &      &      &      \\ \hline
+\tref{id9}  &    &    &    &      &      & X    &      &      \\ \hline
+\tref{id10} &    &    &    &      &      &      & X    &      \\ \hline
+\tref{id11} &    &    &    &      &      &      &      & X    \\ \hline
+\end{tabular}
+\caption{Traceability Matrix Showing the Connections Between Requirements and
+  Test Cases}
+\label{Table:R_trace}
+\end{table}
+
+\section{Unit Test Description} \label{sec5}
 
 \wss{This section should not be filled in until after the MIS (detailed design
   document) has been completed.}
@@ -543,9 +756,9 @@ How test will be performed:
 
 \wss{Provide evidence that all of the modules have been considered.}
 
-\bibliographystyle{plainnat}
-
-\bibliography{../../refs/References}
+%\bibliographystyle{plainnat}
+%
+%\bibliography{../../refs/References}
 
 \newpage
 
@@ -558,33 +771,62 @@ This is where you can place additional information.
 The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
 Their values are defined in this section for easy maintenance.
 
-\subsection{Usability Survey Questions?}
+\subsection{Sample Usability Survey Questions}\label{survey}
+Thank you for participating in this usability survey. Your feedback will help us improve the system’s usability and user experience.
 
-\wss{This is a section that would be appropriate for some projects.}
+\textbf{Participant Information:}
+\begin{itemize}
+    \item Role: \_\_\_\_\_\_\_\_\_\_\_ (e.g., Researcher, Student, Developer)
+    \item Experience with similar tools: \_\_\_\_\_\_\_\_\_\_\_ (None / Beginner / Intermediate / Expert)
+    \item Operating system used: \_\_\_\_\_\_\_\_\_\_\_ (Windows / macOS / Linux)
+\end{itemize}
 
-\newpage{}
-\section*{Appendix --- Reflection}
+\textbf{Task Performance:}
+On a scale from 1 (very difficult) to 5 (very easy), rate how easy it was to complete the following tasks:
+\begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \textbf{Task} & 1 & 2 & 3 & 4 & 5 \\
+        \hline
+        Loading projection data & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        Selecting a filter & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        Generating a sinogram & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        Applying back-projection & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        Viewing and comparing images & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        \hline
+    \end{tabular}
+\end{center}
 
-\wss{This section is not required for CAS 741}
+\textbf{System Usability:}
+Please rate the following aspects of the system on a scale from 1 (strongly disagree) to 5 (strongly agree).
+\begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \textbf{Statement} & 1 & 2 & 3 & 4 & 5 \\
+        \hline
+        The system was easy to use. & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        The instructions were clear. & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        I was able to complete tasks efficiently. & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        The system's response time was acceptable. & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        I would use this system again. & ☐ & ☐ & ☐ & ☐ & ☐ \\
+        \hline
+    \end{tabular}
+\end{center}
 
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.
+\textbf{Open-Ended Feedback:}
+\begin{itemize}
+    \item What did you like most about the system?
+    \newline\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+    \item What difficulties did you encounter?
+    \newline\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+    \item Any additional comments or suggestions?
+    \newline\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\end{itemize}
 
-\input{../Reflection.tex}
+\textbf{Submission:}
+Please submit your responses via email to \texttt{research@domain.com} or upload them to the project repository.\\
 
-\begin{enumerate}
-  \item What went well while writing this deliverable?
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item What knowledge and skills will the team collectively need to acquire to
-  successfully complete the verification and validation of your project?
-  Examples of possible knowledge and skills include dynamic testing knowledge,
-  static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-  identify at least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
-  question, what are at least two approaches to acquiring the knowledge or
-  mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
-\end{enumerate}
+Thank you for your participation!
+
 
 \end{document}
