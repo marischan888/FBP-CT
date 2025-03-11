@@ -279,5 +279,6 @@ TSWLatexianTemp*
 .DS_Store
 
 ## Custom
+.venv
 
-.idea/
+
