@@ -33,7 +33,7 @@
 
 \begin{document}
 
-\title{Module Guide for \progname{}} 
+\title{Module Guide for \progname{}}
 \author{\authname}
 \date{\today}
 
@@ -46,8 +46,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+March 10 & 1.0 & Initial document\\
 \bottomrule
 \end{tabularx}
 
@@ -60,10 +59,10 @@ This section records information for easy reference.
 \subsection{Abbreviations and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
+\begin{tabular}{l l}
+  \toprule
   \textbf{symbol} & \textbf{description}\\
-  \midrule 
+  \midrule
   AC & Anticipated Change\\
   DAG & Directed Acyclic Graph \\
   M & Module \\
@@ -99,7 +98,7 @@ based on the principle of information hiding~\citep{Parnas1972a}.  This
 principle supports design for change, because the ``secrets'' that each module
 hides represent likely future changes.  Design for change is valuable in SC,
 where modifications are frequent, especially during initial development as the
-solution space is explored.  
+solution space is explored.
 
 Our design follows the rules layed out by \citet{ParnasEtAl1984}, as follows:
 \begin{itemize}
@@ -161,12 +160,17 @@ change.
   hardware on which the software is running.
 \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
   initial input data.
-\item ...
+\item [\refstepcounter{acnum} \actheacnum \label{acFilter}:] The filtering
+  algorithm used for reconstruction.
+\item [\refstepcounter{acnum} \actheacnum \label{acAlgo}:] The reconstruction
+  algorithm implementation.
+\item [\refstepcounter{acnum} \actheacnum \label{acResolution}:] The resolution and
+  size of the output image.
+\item [\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of output
+  data.
+\item [\refstepcounter{acnum} \actheacnum \label{acData}:] The choice of data
+  structure for sequence.
 \end{description}
-
-\wss{Anticipated changes relate to changes that would be made in requirements,
-design or implementation choices.  They are not related to changes that are made
-at run-time, like the values of parameters.}
 
 \subsection{Unlikely Changes} \label{SecUchange}
 
@@ -180,7 +184,18 @@ decisions will be changed.
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
   (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI1}:] The core reconstruction
+  algorithm is based on FBP.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI2}:] The mathematical model for
+  Radon transform and back-projection.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI3}:] The type of input data
+  being medical CT scans.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI4}:] The use of Fourier-based
+  filtering for noise reduction.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI5}:] The output data being
+  visulized as a reconstructed CT image.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI6}:] The reliance on matrix
+  operations for computations.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -192,9 +207,12 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item ...
+\item [\refstepcounter{mnum} \mthemnum \label{mIO}:] IO Handler Module
+\item [\refstepcounter{mnum} \mthemnum \label{mF}:] Filters Module
+\item [\refstepcounter{mnum} \mthemnum \label{mFBP}:] FBP Module
+\item [\refstepcounter{mnum} \mthemnum \label{mCon}:] Services Module
+\item [\refstepcounter{mnum} \mthemnum \label{mS}:] Sinogram Simulation Module
 \end{description}
-
 
 \begin{table}[h!]
 \centering
@@ -203,22 +221,16 @@ actually be implemented.
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding Module} & ~ \\
+{Hardware-Hiding Module} & Hardware-Hiding Module \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & IO Handler Module\\
+& Filters Module\\
+& FBP Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
+\multirow{3}{0.3\textwidth}{Software Decision Module} & Services Module\\
+& Sinogram Simulation Module\\
 \bottomrule
 
 \end{tabular}
@@ -278,18 +290,38 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
+\subsubsection{IO Handler Module (\mref{mIO})}
 
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
+\item[Secrets:]The format and structure of the input and output data.
 \item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+  input parameters module. \\
+  Handling the reconstruction module and rendering reconstructed image as a 2D array.
+\item[Implemented By:] FBP CT Image Reconstruction
+\item[Type of Module:] Abstract Data Type
 \end{description}
 
-\subsubsection{Etc.}
+
+\subsubsection{Filters Module (\mref{mF})}
+
+\begin{description}
+\item[Secrets:] The filtering algorithms applied to the sinogram, including Ramp,
+  Shepp-Logan.
+\item[Services:] Applies frequency-domain filtering to enhance image reconstruction
+  and reduce artifacts.
+\item[Implemented By:] FBP CT Image Reconstruction
+\item[Type of Module:] Abstract Data Type
+\end{description}
+
+\subsubsection{FBP Module (\mref{mFBP})}
+
+\begin{description}
+\item[Secrets:] The implementation details of FBP and inverse Radon transform.
+\item[Services:] Reconstructs the CT image from the filtered sinogram using
+  back-projection algorithms.
+\item[Implemented By:] FBP CT Image Reconstruction
+\item[Type of Module:] Abstract Data Type
+\end{description}
 
 
 \subsection{Software Decision Module}
@@ -299,13 +331,30 @@ to be implemented.
   facts, or programming considerations. The secrets of this module are
   \emph{not} described in the SRS.
 \item[Services:] Includes data structure and algorithms used in the system that
-  do not provide direct interaction with the user. 
+  do not provide direct interaction with the user.
   % Changes in these modules are more likely to be motivated by a desire to
   % improve performance than by externally imposed changes.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{Sinogram Simulation Module (\mref{mS})}
+
+\begin{description}
+\item[Secrets:] The process of generating sinograms using the Radon
+  transform, simulating scanner behavior.
+\item[Services:] Generates sinograms from test images, injects them into the FBP pipeline, and compares the reconstructed image to the original for evaluation.
+\item[Implemented By:] FBP CT Image Reconstruction
+\end{description}
+
+\subsubsection{Configuration Module (\mref{mCon})}
+
+\begin{description}
+\item[Secrets:] The storage and structure of configurable parameters for filtering,
+  image resolution, and reconstruction settings.
+\item[Services:] Manages user-defined reconstruction settings, ensuring flexibility
+  in system behavior.
+\item[Implemented By:] FBP CT Image Reconstruction
+\end{description}
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -320,17 +369,9 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+R1 & \mref{mIO}, \mref{mCon}, \mref{mS}\\
+R2 & \mref{mF}\\
+R3 & \mref{mFBP}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -344,17 +385,12 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
+\acref{acInput} & \mref{mIO}, \mref{mS}, \mref{mCon}\\
+\acref{acFilter} & \mref{mF}\\
+\acref{acAlgo} & \mref{mFBP}\\
+\acref{acResolution} & \mref{mIO}\\
+\acref{acOutput} & \mref{mIO}\\
+\acref{acData} & \mref{mIO}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}

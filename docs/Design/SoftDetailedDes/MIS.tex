@@ -19,6 +19,8 @@
 \usepackage[section]{placeins}
 \usepackage{caption}
 \usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 \hypersetup{
 bookmarks=true,     % show bookmarks bar?
@@ -53,8 +55,7 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+March 11 & 1.0 & Initial document\\
 \bottomrule
 \end{tabularx}
 
@@ -76,12 +77,10 @@ See SRS Documentation at \wss{give url}
 
 \section{Introduction}
 
-The following document details the Module Interface Specifications for
-\wss{Fill in your project name and description}
-
+The following document details the Module Interface Specifications for \progname.
 Complementary documents include the System Requirement Specifications
 and Module Guide.  The full documentation and implementation can be
-found at \url{...}.  \wss{provide the url for your repo}
+found at \href{https://github.com/marischan888/FBP-CT/tree/main/docs/Design/SoftDetailedDes}{MIS}.
 
 \section{Notation}
 
@@ -95,21 +94,21 @@ with the addition that template modules have been adapted from
 multiple assignment statement and conditional rules follow the form $(c_1
 \Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
 
-The following table summarizes the primitive data types used by \progname. 
+The following table summarizes the primitive data types used by \progname.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
-\noindent 
-\begin{tabular}{l l p{7.5cm}} 
-\toprule 
-\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
+\noindent
+\begin{tabular}{l l p{7.5cm}}
+\toprule
+\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\
 \midrule
 character & char & a single symbol or digit\\
 integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
 natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
 \bottomrule
-\end{tabular} 
+\end{tabular}
 \end{center}
 
 \noindent
@@ -131,21 +130,17 @@ The following table is taken directly from the Module Guide document for this pr
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding} & ~ \\
+{Hardware-Hiding} & Hardware-Hiding Module \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
-& Output Format\\
-& Output Verification\\
-& Temperature ODEs\\
-& Energy Equations\\ 
-& Control Module\\
-& Specification Parameters Module\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding}
+& Filter Module\\
+& FBP Module\\
+& IO Handler Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & {Sequence Data Structure}\\
-& ODE Solver\\
-& Plotting\\
+\multirow{3}{0.3\textwidth}{Software Decision} & Services Module\\
+& Sinogram Simulation Module\\
 \bottomrule
 
 \end{tabular}
@@ -156,32 +151,26 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
-  cross-referencing}
-
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
-
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
+\section{MIS of Filter Module} \label{Module}
 
 \subsection{Module}
-
-\wss{Short name for the module}
+Filter
 
 \subsection{Uses}
-
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None
 
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\begin{tabular}{|l|l|l|l|}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-\wss{accessProg} & - & - & - \\
+get\_fourier\_filter & s: int, filter\_name: str & filter: \(\mathbb{R}^{s}\)  & OutOfRange, NULL \\
 \hline
 \end{tabular}
 \end{center}
@@ -189,43 +178,310 @@ The following table is taken directly from the Module Guide document for this pr
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
+None
 
 \subsubsection{Environment Variables}
-
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
+None
 
 \subsubsection{Assumptions}
-
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
+Input size s is a positive number.
 
 \subsubsection{Access Routine Semantics}
 
-\noindent \wss{accessProg}():
+\noindent get\_filter(s, filter\_name):
 \begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
+\item output: out := \(2\Re(\mathcal{F}(f(s))\) with\\
+  \(f(s) := (filter\_name = 'shepp' \Rightarrow f(s) \mid\mid filter\_name = 'ramp' \Rightarrow g(s) \mid\mid filter\_name = None \Rightarrow None)\) where: \\
+  \begin{itemize}
+    \item
+      \begin{equation}
+        f(s) =
+        \left\{
+          \begin{aligned}
+            0.25 &, & s = 0 \\
+            \frac{-1}{{\pi s}^2} &, & \text{s is odd}\\
+            0 &, & \text{s is even}\\
+          \end{aligned}
+        \right.
+      \end{equation}
+
+    \item
+      \begin{equation}
+        g(s) =
+        \frac{\sin{\pi\cdot freq(n)}}{\pi\cdot freq(n)} \cdot freq(n)
+      \end{equation}
+      freq(n) corresponds to the frequency bins in the discrete Fourier domain:\\
+      \begin{equation}
+        freq(n) =
+        \left\{
+          \begin{aligned}
+            \frac{n}{s} &, & 0 \leq n < \frac{s}{2} \\
+            \frac{n - s}{s} &, & \frac{s}{2} \leq n < s \\
+          \end{aligned}
+        \right.
+      \end{equation}
+    \end{itemize}
+
+\item exception: \(exc := (s < 0 \Rightarrow OutOfRange | filter\_name \notin \{ramp, None, shepp\}
+  \Rightarrow NULL)\)
 \end{itemize}
 
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
 
 \subsubsection{Local Functions}
+None
 
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
+\newpage
+
+\section{MIS of FBP Module} \label{Module}
+
+\subsection{Module}
+FBP
+
+\subsection{Uses}
+Filter Module
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{|l|m{18em}|l|l|}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+reconstruct & sinogram: \(\mathbb{R}^{m \times n}\), \(theta: \mathbb{R}^{n}\), filter\_name: string, os: int & image: \(\mathbb{R}^{os \times os}\)& ValueError, EmptyArrayError\\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\(filter \in \mathbb{R}^{s}\): The fourier filter.
+
+\subsubsection{Environment Variables}
+None
+
+\subsubsection{Assumptions}
+Input sinogram are valid 2D frequency spectra.
+
+\subsubsection{Access Routine Semantics}
+
+\noindent reconstruct(sinogram, theta, filter\_name, os):
+\begin{itemize}
+\item transition: \(filter := sinogram \Rightarrow Filter.get\_filter(sinogram.size,
+  filter\_name)\) (get\_filter from Filter Module\ref{Module})
+\item output: out :=
+  \begin{itemize}
+    \item \(\mathcal{F}^{-1}(\mathcal{F}(sinogram)\cdot filter)\)
+    \item perform interpolation over angle theta with the preset image size os.
+  \end{itemize}
+  \item exception: exc :=
+    \begin{center}
+      \begin{tabular}{|m{15em}|m{15em}|}
+        \hline
+        \textbf{Exceptions} & \textbf{Description} \\
+        \hline
+        \(os < 0 \mid\mid theta < 0 \Rightarrow ValueError\) & Valid output size and interpolation angle should not be negative. \\
+        \hline
+        \(sinogram.size < 0 \Rightarrow EmptyArrayError\) & The input sinogram is invalid if the input array size is smaller than 0.\\
+        \hline
+      \end{tabular}
+    \end{center}
+\end{itemize}
+
+
+\subsubsection{Local Functions}
+None
+
+\newpage
+\section{MIS of Sinogram Simulation Module} \label{Module}
+
+\subsection{Module}
+Sinogram Simulation
+
+\subsection{Uses}
+None
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{|l|m{18em}|l|l|}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+radon & image: \(\mathbb{R}^{m \times m}\), preserve\_angle: Boolean, theta: \(\mathbb{R}^{n}\) & sinogram: \(\mathbb{R}^{m \times m}\) & None \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+
+\subsubsection{Environment Variables}
+None
+
+\subsubsection{Assumptions}
+Input Image are valid 2D frequency spectra.
+
+\subsubsection{Access Routine Semantics}
+
+
+\noindent
+radon(image, preserve\_angle, theta):
+\begin{itemize}
+\item output: out := sinogram where
+\begin{itemize}
+    \item Use padded\_radon to find out the padded\_image and center of the input
+      image
+      \item sinogram := \(padded\_image \Rightarrow \int_{-\infty}^{\infty} padded\_imgae(x\cos(theta) + y\sin(theta),
+        x\sin(theta) - y\cos(theta))dy\)
+\end{itemize}
+\item exception: None
+\end{itemize}
+
+\subsubsection{Local Functions}
+\noindent
+padding\_radon(image, preserve\_angle):
+\begin{itemize}
+\item transition: None
+\item output: out :=
+  \begin{description}
+    \item[padded\_image] :=
+      \begin{itemize}
+      \item The diagonal length of the padded square image is calculated as:
+        \(d = \sqrt{2}\cdot max(image.size)\)
+      \item The required padding size for each dimension is: \(|d - s|, \forall s \in image.size\)
+      \end{itemize}
+    \item[center] := \(\frac{padded\_image[0]}{2}\)
+  \end{description}
+\item exception: If image is not an 2D array, raise ValueError
+\end{itemize}
+
+\newpage
+\section{MIS of IO Handler Module} \label{Module}
+
+\subsection{Module}
+IO Handler
+
+\subsection{Uses}
+FBP Module\\
+Sinogram Simulation Module\\
+Services Module\\
+Hardware Handling Module\\
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{|l|m{18em}|l|l|}
+  \hline
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+  \hline
+  select\_service & op: String & None & None \\
+  process\_service & File, theta: \(\mathbb{R}^{n}\), filter\_name: String, os: int, preserve\_angle: Boolean & None & ? \\
+  get\_reconstruction & None & reconstruction: \(\mathbb{R}^{os \times os}\) & ? \\
+  \hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+service: Service
+sinogram
+reconstructed\_image
+
+\subsubsection{Environment Variables}
+None
+
+\subsubsection{Assumptions}
+Input Image are valid 2D frequency spectra.
+
+\subsubsection{Access Routine Semantics}
+
+\noindent
+select\_services(op):
+\begin{itemize}
+\item transition:  service := \(op ='reconstruction' \Rightarrow  0 \mid\mid op = 'verification' \Rightarrow  1\)
+\item exception: exc := \(op \notin ['reconstruction', 'verification'] \Rightarrow ValueError\)
+\end{itemize}
+
+\noindent
+process\_service(file, theta, filter\_name, os, preserve\_angle):
+\begin{itemize}
+\item transition:
+  use load\_image to load the image data as a 2D array.
+  \begin{description}
+  \item[sinogram :=] \(service = 0 \Rightarrow load\_image(file, preserve\_angle) \mid\mid
+    service = 1 \Rightarrow simulation.radon()\)
+  \item[reconstructed\_image :=] fbp.reconstruct() from module...
+  \end{description}
+\item exception: exc := ?
+\end{itemize}
+
+\noindent
+get\_reconstruction(None):
+\begin{itemize}
+\item output: out := reconstructed\_image
+\item exception: exc := None
+\end{itemize}
+\subsubsection{Local Functions}
+\noindent
+load\_image(file, preserve\_angle):
+\begin{itemize}
+\item output: read image file and return a 2D numpy array.
+\item exception: exc := file does not exit then FileNotFound.
+\end{itemize}
+
+\newpage
+\section{MIS of Configuration Module} \label{Module}
+
+\subsection{Module}
+Configuration
+
+\subsection{Uses}
+None
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+VERIFICATION = 0\\
+RECONSTRUCTION = 1\\
+
+\subsubsection{Exported Access Programs}
+None
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+None
+
+\subsubsection{Environment Variables}
+None
+
+\subsubsection{Assumptions}
+None
+
+\subsubsection{Access Routine Semantics}
+None
+
+\subsubsection{Local Functions}
+None
 
 \newpage
 
@@ -237,34 +493,6 @@ The following table is taken directly from the Module Guide document for this pr
 \section{Appendix} \label{Appendix}
 
 \wss{Extra information if required}
-
-\newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741 projects}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Problem Analysis and Design.
-
-\input{../../Reflection.tex}
-
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item Which of your design decisions stemmed from speaking to your client(s)
-  or a proxy (e.g. your peers, stakeholders, potential users)? For those that
-  were not, why, and where did they come from?
-  \item While creating the design doc, what parts of your other documents (e.g.
-  requirements, hazard analysis, etc), it any, needed to be changed, and why?
-  \item What are the limitations of your solution?  Put another way, given
-  unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)
-  \item Give a brief overview of other design solutions you considered.  What
-  are the benefits and tradeoffs of those other designs compared with the chosen
-  design?  From all the potential options, why did you select the documented design?
-  (LO\_Explores)
-\end{enumerate}
 
 
 \end{document}
