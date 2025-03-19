@@ -73,7 +73,6 @@ This section records information for easy reference.
   SRS & Software Requirements Specification\\
   \progname & Explanation of program name\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
   \bottomrule
 \end{tabular}\\
 
@@ -185,17 +184,14 @@ decisions will be changed.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
   (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucI1}:] The core reconstruction
-  algorithm is based on FBP.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucI2}:] The mathematical model for
-  Radon transform and back-projection.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucI3}:] The type of input data
-  being medical CT scans.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucI4}:] The use of Fourier-based
+  algorithm is based on back projection.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI2}:] The input data should
+  either be sinogram (from medical scan) for reconstruction or phantom for
+  verification.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI3}:] The use of Fourier-based
   filtering for noise reduction.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucI5}:] The output data being
-  visulized as a reconstructed CT image.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucI6}:] The reliance on matrix
-  operations for computations.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucI4}:] The output data should be
+  visualized as the reconstructed CT images.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -220,16 +216,15 @@ actually be implemented.
 \toprule
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
-
 {Hardware-Hiding Module} & Hardware-Hiding Module \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & IO Handler Module\\
+{Behaviour-Hiding Module} & IO Handler Module\\
 & Filters Module\\
 & FBP Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & Services Module\\
+{Software Decision Module} & Services Module\\
 & Sinogram Simulation Module\\
 \bottomrule
 
@@ -242,14 +237,7 @@ actually be implemented.
 
 The design of the system is intended to satisfy the requirements developed in
 the SRS. In this stage, the system is decomposed into modules. The connection
-between requirements and modules is listed in Table~\ref{TblRT}.
-
-\wss{The intention of this section is to document decisions that are made
-  ``between'' the requirements and the design.  To satisfy some requirements,
-  design decisions need to be made.  Rather than make these decisions implicit,
-  they are explicitly recorded here.  For instance, if a program has security
-  requirements, a specific design decision may be made to satisfy those
-  requirements with a password.}
+between requirements in \href{https://github.com/marischan888/FBP-CT/blob/main/docs/SRS/SRS.pdf}{SRS} and modules is listed in Table~\ref{TblRT}.
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -295,8 +283,8 @@ to be implemented.
 \begin{description}
 \item[Secrets:]The format and structure of the input and output data.
 \item[Services:]Converts the input data into the data structure used by the
-  input parameters module. \\
-  Handling the reconstruction module and rendering reconstructed image as a 2D array.
+  input parameters module. 
+  Handling the reconstruction module and rendering the reconstructed data as an output.
 \item[Implemented By:] FBP CT Image Reconstruction
 \item[Type of Module:] Abstract Data Type
 \end{description}
@@ -307,8 +295,7 @@ to be implemented.
 \begin{description}
 \item[Secrets:] The filtering algorithms applied to the sinogram, including Ramp,
   Shepp-Logan.
-\item[Services:] Applies frequency-domain filtering to enhance image reconstruction
-  and reduce artifacts.
+\item[Services:] Provides implementations of filtering technologies.
 \item[Implemented By:] FBP CT Image Reconstruction
 \item[Type of Module:] Abstract Data Type
 \end{description}
@@ -316,7 +303,7 @@ to be implemented.
 \subsubsection{FBP Module (\mref{mFBP})}
 
 \begin{description}
-\item[Secrets:] The implementation details of FBP and inverse Radon transform.
+\item[Secrets:] The back-projection method with filters.
 \item[Services:] Reconstructs the CT image from the filtered sinogram using
   back-projection algorithms.
 \item[Implemented By:] FBP CT Image Reconstruction
@@ -340,19 +327,16 @@ to be implemented.
 \subsubsection{Sinogram Simulation Module (\mref{mS})}
 
 \begin{description}
-\item[Secrets:] The process of generating sinograms using the Radon
-  transform, simulating scanner behavior.
-\item[Services:] Generates sinograms from test images, injects them into the FBP pipeline, and compares the reconstructed image to the original for evaluation.
+\item[Secrets:] Radon transform.
+\item[Services:] Simulate scanners operation and generate sinograms from the given test images.
 \item[Implemented By:] FBP CT Image Reconstruction
 \end{description}
 
-\subsubsection{Configuration Module (\mref{mCon})}
+\subsubsection{Service Module (\mref{mCon})}
 
 \begin{description}
-\item[Secrets:] The storage and structure of configurable parameters for filtering,
-  image resolution, and reconstruction settings.
-\item[Services:] Manages user-defined reconstruction settings, ensuring flexibility
-  in system behavior.
+\item[Secrets:] Service types, including reconstruction and verification.
+\item[Services:] Provide service configuration.
 \item[Implemented By:] FBP CT Image Reconstruction
 \end{description}
 
@@ -410,18 +394,9 @@ the modules. It can be seen that the graph is a directed acyclic graph
 system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
 
-\wss{The uses relation is not a data flow diagram.  In the code there will often
-be an import statement in module A when it directly uses module B.  Module B
-provides the services that module A needs.  The code for module A needs to be
-able to see these services (hence the import statement).  Since the uses
-relation is transitive, there is a use relation without an import, but the
-arrows in the diagram typically correspond to the presence of import statement.}
-
-\wss{If module A uses module B, the arrow is directed from A to B.}
-
 \begin{figure}[H]
 \centering
-%\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+\includegraphics[width=0.7\textwidth]{DAG.jpg}
 \caption{Use hierarchy among modules}
 \label{FigUH}
 \end{figure}
@@ -429,19 +404,23 @@ arrows in the diagram typically correspond to the presence of import statement.}
 %\section*{References}
 
 \section{User Interfaces}
-
-\wss{Design of user interface for software and hardware.  Attach an appendix if
-needed. Drawings, Sketches, Figma}
-
-\section{Design of Communication Protocols}
-
-\wss{If appropriate}
+Figure \ref{FigUI} illustrates the UI design for \progname.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\paperwidth]{UI.png}
+\caption{User Interfaces Design}
+\label{FigUI}
+\end{figure}
 
 \section{Timeline}
-
-\wss{Schedule of tasks and who is responsible}
-
-\wss{You can point to GitHub if this information is included there}
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
+\toprule {\bf Date} & {\bf Name} & {\bf Description}\\
+\midrule
+March 10 & Qianlin & Initial document\\
+March 20 & Spencer Smith & Instructor review document\\
+March 20 & Joe & Peer review document\\
+\bottomrule
+\end{tabularx}
 
 \bibliographystyle {plainnat}
 \bibliography{../../../refs/References}

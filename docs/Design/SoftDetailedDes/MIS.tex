@@ -63,9 +63,17 @@ March 11 & 1.0 & Initial document\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \wss{give url}
+See SRS Documentation at \href{https://github.com/marischan888/FBP-CT/blob/main/docs/SRS/SRS.pdf}{SRS}.
 
-\wss{Also add any additional symbols, abbreviations or acronyms}
+\noindent \begin{tabular}{l l l}
+\toprule
+\textbf{symbol} & \textbf{unit} & \textbf{description}\\
+\midrule
+$\mathcal{F}$ & None & Fourier Transform \\
+$\mathcal{F}^{-1}$ & None & Inverse Fourier Transform \\
+$d$ & None & diagonal length of padded image \\
+\bottomrule
+\end{tabular}\\
 
 \newpage
 
@@ -83,10 +91,6 @@ and Module Guide.  The full documentation and implementation can be
 found at \href{https://github.com/marischan888/FBP-CT/tree/main/docs/Design/SoftDetailedDes}{MIS}.
 
 \section{Notation}
-
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
-
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
 \cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
@@ -104,9 +108,11 @@ The following table summarizes the primitive data types used by \progname.
 \textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\
 \midrule
 character & char & a single symbol or digit\\
+String & None & a char array\\
 integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
-natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+1D real number array with size s & $\mathbb{R}^(s)$ & any number in (-$\infty$, $\infty$)\\
+2D real number array with size m & $\mathbb{R}^{m \times m}$ & any number in (-$\infty$, $\infty$)\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -133,13 +139,13 @@ The following table is taken directly from the Module Guide document for this pr
 {Hardware-Hiding} & Hardware-Hiding Module \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding}
+{Behaviour-Hiding}
 & Filter Module\\
 & FBP Module\\
 & IO Handler Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & Services Module\\
+{Software Decision} & Services Module\\
 & Sinogram Simulation Module\\
 \bottomrule
 
@@ -151,7 +157,7 @@ The following table is taken directly from the Module Guide document for this pr
 \newpage
 ~\newpage
 
-\section{MIS of Filter Module} \label{Module}
+\section{MIS of Filter Module} \label{ModuleF}
 
 \subsection{Module}
 Filter
@@ -170,7 +176,7 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-get\_fourier\_filter & s: int, filter\_name: str & filter: \(\mathbb{R}^{s}\)  & OutOfRange, NULL \\
+get\_fourier\_filter & s: \(\mathbb{Z}\), filter\_name: String & filter: \(\mathbb{R}^{s}\)  & ValueError, NULL \\
 \hline
 \end{tabular}
 \end{center}
@@ -190,7 +196,7 @@ Input size s is a positive number.
 
 \noindent get\_filter(s, filter\_name):
 \begin{itemize}
-\item output: out := \(2\Re(\mathcal{F}(f(s))\) with\\
+\item output: \(2\Re(\mathcal{F}(f(s))\) with\\
   \(f(s) := (filter\_name = 'shepp' \Rightarrow f(s) \mid\mid filter\_name = 'ramp' \Rightarrow g(s) \mid\mid filter\_name = None \Rightarrow None)\) where: \\
   \begin{itemize}
     \item
@@ -222,7 +228,7 @@ Input size s is a positive number.
       \end{equation}
     \end{itemize}
 
-\item exception: \(exc := (s < 0 \Rightarrow OutOfRange | filter\_name \notin \{ramp, None, shepp\}
+\item exception: \(exc := (s < 0 \Rightarrow ValueError \mid filter\_name \notin \{ramp, None, shepp\}
   \Rightarrow NULL)\)
 \end{itemize}
 
@@ -232,7 +238,7 @@ None
 
 \newpage
 
-\section{MIS of FBP Module} \label{Module}
+\section{MIS of FBP Module} \label{ModuleFBP}
 
 \subsection{Module}
 FBP
@@ -248,11 +254,11 @@ None
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{|l|m{18em}|l|l|}
+  \begin{tabular}{|l|m{18em}|l|m{11em}|}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-reconstruct & sinogram: \(\mathbb{R}^{m \times n}\), \(theta: \mathbb{R}^{n}\), filter\_name: string, os: int & image: \(\mathbb{R}^{os \times os}\)& ValueError, EmptyArrayError\\
+reconstruct & sinogram: \(\mathbb{R}^{m \times m}\), \(theta: \mathbb{R}^{n}\), filter\_name: string, os: int & image: \(\mathbb{R}^{os \times os}\)& ValueError, EmptyArrayError\\
 \hline
 \end{tabular}
 \end{center}
@@ -260,7 +266,7 @@ reconstruct & sinogram: \(\mathbb{R}^{m \times n}\), \(theta: \mathbb{R}^{n}\), 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-\(filter \in \mathbb{R}^{s}\): The fourier filter.
+\(filter \in \mathbb{R}^{s}\): 1D array with size s as the fourier filter.
 
 \subsubsection{Environment Variables}
 None
@@ -273,7 +279,7 @@ Input sinogram are valid 2D frequency spectra.
 \noindent reconstruct(sinogram, theta, filter\_name, os):
 \begin{itemize}
 \item transition: \(filter := sinogram \Rightarrow Filter.get\_filter(sinogram.size,
-  filter\_name)\) (get\_filter from Filter Module\ref{Module})
+  filter\_name)\) (get\_filter from Filter Module\ref{ModuleF})
 \item output: out :=
   \begin{itemize}
     \item \(\mathcal{F}^{-1}(\mathcal{F}(sinogram)\cdot filter)\)
@@ -298,7 +304,7 @@ Input sinogram are valid 2D frequency spectra.
 None
 
 \newpage
-\section{MIS of Sinogram Simulation Module} \label{Module}
+\section{MIS of Sinogram Simulation Module} \label{ModuleS}
 
 \subsection{Module}
 Sinogram Simulation
@@ -340,7 +346,7 @@ Input Image are valid 2D frequency spectra.
 \noindent
 radon(image, preserve\_angle, theta):
 \begin{itemize}
-\item output: out := sinogram where
+\item output: sinogram.
 \begin{itemize}
     \item Use padded\_radon to find out the padded\_image and center of the input
       image
@@ -354,8 +360,7 @@ radon(image, preserve\_angle, theta):
 \noindent
 padding\_radon(image, preserve\_angle):
 \begin{itemize}
-\item transition: None
-\item output: out :=
+\item output: padded\_image and center.
   \begin{description}
     \item[padded\_image] :=
       \begin{itemize}
@@ -369,7 +374,7 @@ padding\_radon(image, preserve\_angle):
 \end{itemize}
 
 \newpage
-\section{MIS of IO Handler Module} \label{Module}
+\section{MIS of IO Handler Module} \label{ModuleIO}
 
 \subsection{Module}
 IO Handler
@@ -388,13 +393,15 @@ None
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{|l|m{18em}|l|l|}
+  \begin{tabular}{|l|m{10em}|l|m{8em}|}
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
   \hline
-  select\_service & op: String & None & None \\
-  process\_service & File, theta: \(\mathbb{R}^{n}\), filter\_name: String, os: int, preserve\_angle: Boolean & None & ? \\
-  get\_reconstruction & None & reconstruction: \(\mathbb{R}^{os \times os}\) & ? \\
+  select\_service & op: String & None & ValueError \\
+  \hline
+    process\_service & file: \(\mathbb{R}^{m \times m}\), theta: \(\mathbb{R}^{m}\), filter\_name: String, os: int, preserve\_angle: Boolean & None & None \\
+  \hline
+  get\_reconstruction & None & reconstruction: \(\mathbb{R}^{os \times os}\) & None \\
   \hline
 \end{tabular}
 \end{center}
@@ -402,9 +409,9 @@ None
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-service: Service
-sinogram
-reconstructed\_image
+service: service type\\
+sinogram: a 2D array with size m\\
+reconstructed\_image: a 2D array with size os\\
 
 \subsubsection{Environment Variables}
 None
@@ -425,20 +432,19 @@ select\_services(op):
 process\_service(file, theta, filter\_name, os, preserve\_angle):
 \begin{itemize}
 \item transition:
-  use load\_image to load the image data as a 2D array.
   \begin{description}
   \item[sinogram :=] \(service = 0 \Rightarrow load\_image(file, preserve\_angle) \mid\mid
     service = 1 \Rightarrow simulation.radon()\)
-  \item[reconstructed\_image :=] fbp.reconstruct() from module...
+  \item[reconstructed\_image :=] fbp.reconstruct() from Module \ref{ModuleFBP}.
   \end{description}
-\item exception: exc := ?
+\item exception: None
 \end{itemize}
 
 \noindent
 get\_reconstruction(None):
 \begin{itemize}
 \item output: out := reconstructed\_image
-\item exception: exc := None
+\item exception: None
 \end{itemize}
 \subsubsection{Local Functions}
 \noindent
@@ -449,10 +455,10 @@ load\_image(file, preserve\_angle):
 \end{itemize}
 
 \newpage
-\section{MIS of Configuration Module} \label{Module}
+\section{MIS of Services Module} \label{ModuleCon}
 
 \subsection{Module}
-Configuration
+Services
 
 \subsection{Uses}
 None
