@@ -34,7 +34,7 @@ jobs:
       - name: Run tests with coverage
         run: |
           export PYTHONPATH=$(pwd)/src
-          coverage run --source=src -m pytest test
+          coverage run --source=src --omit="src/gui/*" -m pytest test
 
       - name: Generate coverage report
         run: |
