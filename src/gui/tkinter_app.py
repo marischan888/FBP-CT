@@ -36,7 +36,7 @@ class CTApp(tb.Window):
 
         for PageClass in [HomePage, ReconstructionPage,
                           ReconstructionResultPage, SimulationPage,
-                          SimulationResultPage]:  # add other pages later
+                          SimulationResultPage]:
             page_name = PageClass.__name__
             frame = PageClass(parent=container, controller=self)
             self.frames[page_name] = frame
