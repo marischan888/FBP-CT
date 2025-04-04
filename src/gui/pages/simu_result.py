@@ -1,4 +1,6 @@
 import os
+
+from matplotlib import pyplot as plt
 from ttkbootstrap.dialogs.dialogs import Messagebox
 
 from tkinter.filedialog import *
@@ -101,8 +103,10 @@ class SimulationResultPage(tb.Frame):
         from PIL import Image, ImageTk
         import numpy as np
         def to_tk_image(img_array, size):
-            img_norm = (img_array / np.max(img_array) * 255).astype(np.uint8)
-            img_pil = Image.fromarray(img_norm)
+            color_map = plt.get_cmap('gray')
+            img_array = color_map(img_array / np.max(img_array))
+            img_array = (img_array * 255.9999).astype(np.uint8)
+            img_pil = Image.fromarray(img_array)
             img_pil = img_pil.resize(size)
             return ImageTk.PhotoImage(img_pil)
 

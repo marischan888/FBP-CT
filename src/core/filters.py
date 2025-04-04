@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.fft import fft, fftfreq
+from scipy.fft import fft, ifft, fftfreq, fftshift
 from src.config.ir_config import FilterType
 
 
@@ -23,6 +23,14 @@ class Filters:
             case FilterType.SHEPP:
                 omega = np.pi * fftfreq(size)[1:]
                 fourier_filter[1:] *= np.sin(omega) / omega
+            case FilterType.COSINE:
+                freq = np.linspace(0, np.pi, size, endpoint=False)
+                cosine_filter = fftshift(np.sin(freq))
+                fourier_filter *= cosine_filter
+            case FilterType.HAMMING:
+                fourier_filter *= fftshift(np.hamming(size))
+            case FilterType.HANN:
+                fourier_filter *= fftshift(np.hanning(size))
             case FilterType.NONE:
                 fourier_filter[:] = 1
             case _:

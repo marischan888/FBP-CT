@@ -2,6 +2,7 @@ import os
 import imageio
 import h5py
 import numpy as np
+from matplotlib import pyplot as plt, cm
 from skimage.transform import resize
 
 
@@ -26,13 +27,17 @@ def load_file(path):
     elif ext == '.h5':
         file = load_h5(path)
     else:
-        raise ValueError('Unsupported file. Use .h5 or image formats like .png')
+        raise ValueError(
+            'Unsupported file. Use .h5 or image formats like .png'
+            )
     return file
 
 
 def save_image(image: np.ndarray, path: str):
     """Save a NumPy array as a grayscale image."""
-    image_uint8 = (image / np.max(image) * 255).astype(np.uint8)
+    cm = plt.get_cmap('gray')
+    image = cm(image / np.max(image))
+    image_uint8 = (image * 255.9999).astype(np.uint8)
     imageio.imwrite(path, image_uint8)
 
 
@@ -46,4 +51,6 @@ def save_result(result: np.ndarray, path: str):
     elif ext in ['.png', '.jpg', '.jpeg']:
         save_image(result, path)
     else:
-        raise ValueError("Unsupported save format. Use .h5 or image formats like .png")
+        raise ValueError(
+            "Unsupported save format. Use .h5 or image formats like .png"
+            )
