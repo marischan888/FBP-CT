@@ -21,14 +21,12 @@ class FBP:
         :param sinogram:  ndarray
             Image containing radon transform (sinogram). Each column of
             the image corresponds to a projection along a different
-            angle. The tomography rotation axis should lie at the pixel
-            index ``radon_image.shape[0] // 2`` along the 0th dimension of
-            ``radon_image``.
+            angle.
         :param theta: int
             Reconstruction angles (in degrees). Default: m angles evenly spaced
-            between 0 and 180 (if the shape of `radon_image` is (N, M)).
+            between 0 and 180.
         :param filter_type: str
-            Filter used in frequency domain filtering. Ramp filter used by default.
+            Filter used in frequency domain filtering.
             Filters available: ramp, shepp-logan, cosine, hamming, hann.
             Assign None to use no filter.
         :param output_size: int
@@ -50,9 +48,7 @@ class FBP:
     def iradon(self):
         """
         :return: ndarray
-            Reconstructed image. The rotation axis will be located in the pixel
-            with indices
-            ``(reconstructed.shape[0] // 2, reconstructed.shape[1] // 2)``.
+            Reconstructed image.
         """
         if self.sinogram.ndim != 2:
             raise ValueError('The input image must be 2-D')
@@ -80,10 +76,14 @@ class FBP:
             self.output_size = int(np.floor(np.sqrt((img_shape) ** 2 / 2.0)))
 
         # Resize image to next power of two (but no less than 64) for
-        # Fourier analysis; speeds up Fourier and lessens artifacts
+        # Fourier analysis.
+        # 1. Speeding up Fourier from O(N^2) to O(NlogN)
+        # 2. Reducing artifacts
+        ## FFT is most efficient when input size is power of 2
         projection_size_padded = max(
             64, int(2 ** np.ceil(np.log2(2 * img_shape)))
             )
+        ## Pads only the columns (i.e., detector dimension) of the sinogram.
         pad_width = ((0, projection_size_padded - img_shape), (0, 0))
         img = np.pad(
             self.sinogram, pad_width, mode='constant', constant_values=0
@@ -95,6 +95,7 @@ class FBP:
             )
 
         projection = fft(img, axis=0) * fourier_filter
+        # Inverse back to spatial domain
         radon_filtered = np.real(ifft(projection, axis=0)[:img_shape, :])
 
         # Reconstruct image by interpolation
@@ -126,4 +127,6 @@ class FBP:
 
             reconstructed += interpolant(t)
 
+        # Doing normalization
+        # Scaling FBP based on the number of projection angles
         return reconstructed * np.pi / (2 * angles_count)

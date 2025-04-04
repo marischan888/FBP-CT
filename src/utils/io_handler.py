@@ -2,7 +2,7 @@ import os
 import imageio
 import h5py
 import numpy as np
-from matplotlib import pyplot as plt, cm
+from matplotlib import pyplot as plt
 from skimage.transform import resize
 
 
