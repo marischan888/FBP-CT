@@ -6,7 +6,7 @@ pytest==8.3.5
 scipy==1.15.2
 ttkbootstrap>1.10.0
 scikit-image>0.25
-imageio==2.37.0
+imageio>2.36.0
 h5py==3.13.0
 jupyter==1.1.1
 pip==24.3.1
@@ -21,4 +21,4 @@ psutil==7.0.0
 traitlets==5.14.3
 jupyter_core==5.7.2
 ipython==9.0.2
-matplotlib==3.10.1
+matplotlib>3.10
