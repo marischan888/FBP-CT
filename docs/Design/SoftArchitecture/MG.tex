@@ -31,8 +31,18 @@
 \newcommand{\mthemnum}{M\themnum}
 \newcommand{\mref}[1]{M\ref{#1}}
 
-\begin{document}
+\usepackage{gensymb}
+\usepackage{soul,xcolor}
+\newcommand{\add}{\textcolor{red}}
+\usepackage{lipsum}
+\usepackage[many]{tcolorbox}
 
+\newtcolorbox{cross}{blank,breakable,parbox=false,
+  overlay={\draw[red,line width=5pt] (interior.south west)--(interior.north east);
+    \draw[red,line width=5pt] (interior.north west)--(interior.south east);}}
+
+\begin{document}
+\setstcolor{red}
 \title{Module Guide for \progname{}}
 \author{\authname}
 \date{\today}
@@ -47,6 +57,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 March 10 & 1.0 & Initial document\\
+April 10 & 2.0 & Final document\\
 \bottomrule
 \end{tabularx}
 
@@ -216,16 +227,16 @@ actually be implemented.
 \toprule
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
-{Hardware-Hiding Module} & Hardware-Hiding Module \\
+{Hardware-Hiding Module} & \st{Hardware-Hiding Module} \\
 \midrule
 
-{Behaviour-Hiding Module} & IO Handler Module\\
+{Behaviour-Hiding Module} & \add{Sinogram Simulation Module} \st{IO Handler Module}\\
 & Filters Module\\
 & FBP Module\\
 \midrule
 
 {Software Decision Module} & Services Module\\
-& Sinogram Simulation Module\\
+& \add{IO Handler Module} \st{Sinogram Simulation Module}\\
 \bottomrule
 
 \end{tabular}
@@ -278,18 +289,6 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{IO Handler Module (\mref{mIO})}
-
-\begin{description}
-\item[Secrets:]The format and structure of the input and output data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module. 
-  Handling the reconstruction module and rendering the reconstructed data as an output.
-\item[Implemented By:] FBP CT Image Reconstruction
-\item[Type of Module:] Abstract Data Type
-\end{description}
-
-
 \subsubsection{Filters Module (\mref{mF})}
 
 \begin{description}
@@ -297,7 +296,8 @@ to be implemented.
   Shepp-Logan.
 \item[Services:] Provides implementations of filtering technologies.
 \item[Implemented By:] FBP CT Image Reconstruction
-\item[Type of Module:] Abstract Data Type
+\item[Type of Module:] Abstract Type
+\item\add{[Implemented By:] FBP}
 \end{description}
 
 \subsubsection{FBP Module (\mref{mFBP})}
@@ -307,7 +307,18 @@ to be implemented.
 \item[Services:] Reconstructs the CT image from the filtered sinogram using
   back-projection algorithms.
 \item[Implemented By:] FBP CT Image Reconstruction
-\item[Type of Module:] Abstract Data Type
+\item[Type of Module:] Abstract Type
+\item\add{[Implemented By:] Service}
+\end{description}
+
+\subsubsection{Sinogram Simulation Module (\mref{mS})}
+
+\begin{description}
+\item[Secrets:] Radon transform.
+\item[Services:] Simulate scanners operation and generate sinograms from the given test images.
+\item\add{[Implemented By:] Service}
+\item[Type of Module:] Abstract Type
+\item\st{[Implemented By:] FBP CT Image Reconstruction}
 \end{description}
 
 
@@ -324,21 +335,29 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Sinogram Simulation Module (\mref{mS})}
-
-\begin{description}
-\item[Secrets:] Radon transform.
-\item[Services:] Simulate scanners operation and generate sinograms from the given test images.
-\item[Implemented By:] FBP CT Image Reconstruction
-\end{description}
 
 \subsubsection{Service Module (\mref{mCon})}
 
+\begin{cross}
 \begin{description}
-\item[Secrets:] Service types, including reconstruction and verification.
-\item[Services:] Provide service configuration.
-\item[Implemented By:] FBP CT Image Reconstruction
+\item[Secrets:] \add{None}\st{Service types, including reconstruction and verification.}
+\item[Services:] \add{Access to the FBP and Simulation.}\st{Provide service configuration.}
+\item[Implemented By:] \add{None} \st{FBP CT Image Reconstruction}
 \end{description}
+\end{cross}
+
+
+
+\subsubsection{IO Handler Module (\mref{mIO})}
+
+\begin{description}
+\item[Secrets:]The format and structure of the input and output data.
+\item[Services:]Converts the input data into the data structure used by the
+  input parameters module.
+  Handling the reconstruction module and rendering the reconstructed data as an output.
+\item[Implemented By:] \add{FBP, Simulation}\st{FBP CT Image Reconstruction}
+\end{description}
+
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -394,13 +413,20 @@ the modules. It can be seen that the graph is a directed acyclic graph
 system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
 
+\begin{cross}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{DAG.jpg}
+\includegraphics[scale=0.5]{DAG.jpg}
 \caption{Use hierarchy among modules}
+\end{figure}
+\end{cross}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{m2.png}
+\caption{\add{Use hierarchy among modules}}
 \label{FigUH}
 \end{figure}
-
 %\section*{References}
 
 \section{User Interfaces}
