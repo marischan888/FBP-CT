@@ -1,14 +1,17 @@
 \documentclass[12pt, titlepage]{article}
 
+\usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+
 \hypersetup{
-    colorlinks,
-    citecolor=blue,
-    filecolor=black,
-    linkcolor=red,
-    urlcolor=blue
+    bookmarks=true,         % show bookmarks bar?
+      colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
 }
 \usepackage[round]{natbib}
 \usepackage{float}
@@ -20,9 +23,23 @@
 
 \newcounter{testnum}
 \newcommand{\dthetestnum}{id\thetestnum}
-\newcommand{\tref}[1]{id\ref{#1}}
+\newcommand{\tref}[1]{id}
+
+\usepackage{graphicx}
+
+\usepackage{gensymb}
+\usepackage{soul,xcolor}
+\newcommand{\add}{\textcolor{red}}
+\usepackage{lipsum}
+\usepackage[many]{tcolorbox}
+
+\newtcolorbox{cross}{blank,breakable,parbox=false,
+  overlay={\draw[red,line width=5pt] (interior.south west)--(interior.north east);
+    \draw[red,line width=5pt] (interior.north west)--(interior.south east);}}
 
 \begin{document}
+\setstcolor{red}
+
 
 \title{System Verification and Validation Plan for \progname{}}
 \author{\authname}
@@ -37,7 +54,7 @@
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Feb 24, 2025 & 1.0 & Initial VnV\\
-... & ... & ...\\
+Apr 10, 2025 & 2.0 & Final Documentation\\
 \bottomrule
 \end{tabularx}
 
@@ -100,13 +117,13 @@ are also assessed using user inputs and experimental results.
 
 \subsection{Objectives}
 The purpose of the validation plan is to define how system validation will
-perform at the end of the project. The strategy will use to assess whether the
-developed system accomplishes the design goals. Also, the verification plan
+perform at the end of the project.\st{The strategy will use to assess whether the
+developed system accomplishes the design goals. Also, } The verification plan
 includes test strategies, definitions of what will be tested, and a test matrix
 with detailed mapping connecting the tests performed to the system
 requirements.
 
-Due to resource constraints, validation will be limited to
+Due to resource constraints, \add{verification}\st{validation} will be limited to
 peer-based testing for accuracy and usability. While this ensures basic
 functionality and user experience evaluation, the absence of domain experts,
 such as doctors or researchers, prevents validation in real-world clinical or
@@ -119,13 +136,15 @@ performance of the system. The validation plan includes extensive functional and
 testing, leveraging automated tools, formal proofs, and usability evaluations to
 assess correctness, efficiency, and maintainability.
 
-Additionally, this project incorporates code walkthroughs, user documentation,
+\st{Additionally, this project incorporates code walkthroughs, user documentation,
 and design reviews to enhance system reliability and comprehensibility. The
 scope of validation covers core algorithmic accuracy while excluding external
 dependencies, which are assumed to be pre-validated. This structured approach
 ensures that the system meets its defined performance, usability, and
 verification requirements while adhering to resource constraints.
+}
 
+\add{The extra material will be a video, guiding user how to use this system.}
 
 \subsection{Relevant Documentation}
 The relevant documentation for the VnV includes
@@ -133,10 +152,8 @@ The relevant documentation for the VnV includes
   Statement} which identifies the proposed idea,
 \href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/blob/main/docs/SRS/SRS.pdf}{System
   Requirements Specifications} which provides information about the requirement
-of the proposed system, VnV Report for validation and verification, MG and MIS
-design documents for unit testing (found in
-\href{https://github.com/marischan888/Computed-Tomography-Image-Reconstruction/tree/main/docs/Design}{Github
-  Repository}).
+of the proposed system, \href{https://github.com/marischan888/FBP-CT/tree/main/docs/VnVPlan}{VnV Plan} for validation and verification, \href{https://github.com/marischan888/FBP-CT/tree/main/docs/Design}{MG and MIS}
+design documents for unit testing.
 
 \section{Plan} \label{sec3}
 This section describes the verification and validation plan for the
@@ -178,7 +195,7 @@ process. The verification plan consists of the following steps:
     Checklist} will be used to systematically evaluate key aspects such as
   requirement completeness, consistency, feasibility, and traceability.
 \item[Issue Tracking] \hfill \\
-  eviewers will provide feedback by documenting identified issues in an issue
+  \add{Reviewers}\st{eviewers} will provide feedback by documenting identified issues in an issue
   tracker (GitHub Issues). Each issue will be
   assigned to the document owner for later revision.
 \item[Revision] \hfill \\
@@ -222,10 +239,11 @@ confirm that all necessary corrections have been implemented before approval.
 \begin{itemize}
 \item Static Verification:
   \begin{itemize}
-      \item Code Walkthrough: A structured review process where team members
+      \item Code Walkthrough: A structured review process where team members [\ref{vnvteam}]
         manually inspect the code for correctness, maintainability, and
-        adherence to design specifications. This process ensures that critical
-        components meet functional requirements before execution.
+        adherence to design specifications. \add{This process will be held
+          during the implementation presentation in the course.}\st{This process ensures that critical
+        components meet functional requirements before execution.}
   \end{itemize}
   \item Dynamic Verification:
     \begin{itemize}
@@ -272,7 +290,7 @@ access to researcher for review, formal validation cannot be conducted at this
 stage.
 
 However, internal review sessions may be used to ensure that the system
-aligns with specified requirements. Future validation efforts could include
+aligns with \add{functional}\st{specified} requirements. Future validation efforts could include
 structured user testing or a Rev 0 demo if external stakeholders become
 available. Until then, verification efforts will focus on functional correctness
 through testing, as outlined in the SRS verification section.
@@ -300,10 +318,11 @@ test for the R3 is in the Section \ref{output_test} \\
 
 \subsubsection{Input Tests} \label{input_test}
 
+\begin{cross}
 \paragraph{Test for Input - 2D grayscale image}
 % Add reference for the input
 \begin{enumerate}
-\item{test-input-image-\refstepcounter{testnum} \label{id1}\dthetestnum}
+\item{test-input-image-\refstepcounter{testnum}}
 \begin{description}
 \item[Control:] Automatic
 
@@ -333,21 +352,55 @@ test for the R3 is in the Section \ref{output_test} \\
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
 \end{enumerate}
+\end{cross}
+
+
+\paragraph{\add{Test for Input - Image}}
+% Add reference for the input
+\begin{itemize}
+\item test-input-image-\refstepcounter{testnum} \label{id1}\dthetestnum
+\begin{description}
+\item[Control:] Automatic
+
+\item[Initial State:] Pending Input.
+
+\item[Input:] Figure \ref{brain} and the projection angle 180 degree.
+  \begin{figure}
+      \centering
+      \includegraphics[scale=0.25]{t1.jpg}
+      \caption{Brain.png as input image}
+      \label{brain}
+  \end{figure}
+
+\item[Output:] The simulated sinogram of brain. Figure \ref{sino}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.5]{t1_r.png}
+      \caption{Sinogram.png as ouput image}
+      \label{sino}
+  \end{figure}
+
+\item[Test Case Derivation:] This test ensures that the system correctly accepts a
+  valid image(in jpg), applies the Radon Transform, and produces a
+  valid sinogram of the original image.
+
+\item[How test will be performed:] The test will be automated using PyTest.
+\end{description}
+\end{itemize}
 
 \paragraph{Test for Input - filter type}
 % Add a table, given all input and their expected output
 
-\begin{enumerate}
+\begin{itemize}
 \item{test-input-filter-type-\refstepcounter{testnum} \label{id2} \dthetestnum}
 \begin{description}
 \item[Control:] Automatic
 
-\item[Initial State:] System has generated the sinogram matrix and the user is
-  ready to select the ramp filter.
+\item[Initial State:] User is ready to select the ramp filter.
 
-\item[Input:] Shepp-logan filter type and the size of sinogram in the Table\ref{TableA}.
+\item[Input:] \add{Ramp (enum type represents shepp logan filter)} and the size of sinogram in the Table\ref{TableA}.
 
-\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
+\item[Output:] A \add{2-D}\st{1-D} array that represent the selected Fourier filter in the Table\ref{TableA}.
 
 \item[Test Case Derivation:] \hfill \\
   This test ensures that the system correctly processes
@@ -357,9 +410,9 @@ test for the R3 is in the Section \ref{output_test} \\
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
-\end{enumerate}
+\end{itemize}
 
-\begin{enumerate}
+\begin{itemize}
 \item{test-input-filter-type-\refstepcounter{testnum} \label{id3} \dthetestnum}
 \begin{description}
 \item[Control:] Automatic
@@ -368,9 +421,9 @@ test for the R3 is in the Section \ref{output_test} \\
 \item[Initial State:] System has generated the sinogram matrix and the user is
   ready to select the ramp filter.
 
-\item[Input:] Shepp-logan filter type and the size of sinogram in the Table\ref{TableA}.
+\item[Input:] \add{Shepp (enum type represents shepp logan filter)} and the size of sinogram in the Table\ref{TableA}.
 
-\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
+\item[Output:] A \add{2-D}\st{1-D} array that represent the selected Fourier filter in the Table\ref{TableA}.
 
 \item[Test Case Derivation:] \hfill \\
   This test ensures that the system correctly processes
@@ -380,9 +433,9 @@ test for the R3 is in the Section \ref{output_test} \\
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
-\end{enumerate}
+\end{itemize}
 
-\begin{enumerate}
+\begin{itemize}
 \item{test-input-invalid-filter-type-\refstepcounter{testnum} \label{id4} \dthetestnum}
 \begin{description}
 \item[Control:] Automatic
@@ -391,9 +444,10 @@ test for the R3 is in the Section \ref{output_test} \\
 \item[Initial State:] System has generated the sinogram matrix and the user is
   ready to select the ramp filter.
 
-\item[Input:] No filter type and the size of sinogram in the Table\ref{TableA}.
+\item[Input:] \add{any random input} and the size of sinogram in the Table\ref{TableA}.
 
-\item[Output:] A 1-D array that represent the selected Fourier filter in the Table\ref{TableA}.
+\item[Output:] \add{None} \st{A 1-D array that represent the selected Fourier
+    filter in the Table A}.
 
 \item[Test Case Derivation:] \hfill \\
   This test ensures that the system correctly processes
@@ -403,17 +457,39 @@ test for the R3 is in the Section \ref{output_test} \\
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
-\end{enumerate}
+\end{itemize}
 
 \begin{table}[H]
   \centering
-  \begin{tabularx}{\linewidth}{|X|X|X|}
+  \begin{tabularx}{\linewidth}{|X|X|p{5cm}|}
     \hline
     Test Id                                  & Input                                            & Expected Output                                                                                                                             \\
     \hline
-    test-input-filter-type-id\ref{id2}         & Filter Type: ramp (str); Sinogram size: 10 (int)  & 1-D array represent ramp filter variable: [0.0, 0.314159, 0.628318, 0.942477, 1.256636, 1.570796, 1.256636, 0.942477, 0.628318, 0.314159] \\ \hline
-    test-input-filter-type-id\ref{id3}         & Filter Type: shepp (str); Sinogram size: 10 (int) & 1-D array represent shepp-logan filter variable: [0.0, 0.2984, 0.5630, 0.7958, 0.9817, 1.0986, 0.9817, 0.7958, 0.5630, 0.2984]            \\ \hline
-    test-input-invalid-filter-type-id\ref{id4} & anything other than ramp and shepp               & None                                                                                                                                        \\ \hline
+    test-input-filter-type-id\ref{id2}         & Filter Type: Ramp (enum); Sinogram
+                                              size: 10 (int)  & \add{[[0.20341038]
+                                                                [0.31405081]
+                                                                [0.44208139]
+                                                                [0.55791861]
+                                                                [0.68594919]
+                                                                [0.79658962]
+                                                                [0.68594919]
+                                                                [0.55791861]
+                                                                [0.44208139]
+                                                                [0.31405081]]}
+                                                                \st{1-D array represent ramp filter variable: [0.0, 0.314159, 0.628318, 0.942477, 1.256636, 1.570796, 1.256636, 0.942477, 0.628318, 0.314159]} \\ \hline
+    test-input-filter-type-id\ref{id3}         & Filter Type: Shepp (enum);
+                                              Sinogram size: 10 (int) & \add{[[0.20341038]
+                                                                        [0.30891032]
+                                                                        [0.4135624 ]
+                                                                        [0.47891382]
+                                                                        [0.51914468]
+                                                                        [0.5071247 ]
+                                                                        [0.51914468]
+                                                                        [0.47891382]
+                                                                        [0.4135624 ]
+                                                                        [0.30891032]]}
+                                                                        \st{1-D array represent shepp-logan filter variable: [0.0, 0.2984, 0.5630, 0.7958, 0.9817, 1.0986, 0.9817, 0.7958, 0.5630, 0.2984]}            \\ \hline
+    test-input-invalid-filter-type-id\ref{id4} & any input other than ramp and shepp               & None                                                                                                                                        \\ \hline
   \end{tabularx}
   \caption{The inputs and outputs for filter tests}
   \label{TableA}
@@ -422,7 +498,7 @@ test for the R3 is in the Section \ref{output_test} \\
 
 \subsubsection{Output Tests}\label{output_test}
 \paragraph{Test for Output - attenuation}
-\begin{enumerate}
+\begin{itemize}
 \item{test-output-attenuation-\refstepcounter{testnum} \label{id5} \dthetestnum}
 \begin{description}
 \item[Control:] Automatic
@@ -430,18 +506,18 @@ test for the R3 is in the Section \ref{output_test} \\
 \item[Initial State:] The system is ready to perform back-projection on a given
   sinogram and filter type.
 
-\item[Input:] A sinogram and the ramp filter in the Table \ref{Table B}.
+\item[Input:] A \add{brains} sinogram and the ramp filter in the Table \ref{Table B}.
 
-\item[Output:] A 2-D array that represent the reconstructed attenuation in the
-  Table\ref{Table B}.
+\item[Output:] \st{A 2-D array that represent the reconstructed attenuation in the
+  Table}\add{An image in}\ref{Table B}.
 
 \item[Test Case Derivation:] This test ensures that the system correctly applies the back-projection process to reconstruct an image from a given sinogram. The test verifies that the output maintains the expected shape and that the reconstructed attenuation values correctly represent the original structure.
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
-\end{enumerate}
+\end{itemize}
 
-\begin{enumerate}
+\begin{itemize}
 \item{test-output-attenuation-\refstepcounter{testnum} \label{id6} \dthetestnum}
 \begin{description}
 \item[Control:] Automatic
@@ -449,47 +525,49 @@ test for the R3 is in the Section \ref{output_test} \\
 \item[Initial State:] The system is ready to perform back-projection on a given
   sinogram and filter type.
 
-\item[Input:] A sinogram and the shepp-logan filter in the Table \ref{Table B}.
+\item[Input:] A \add{brain} sinogram and the shepp-logan filter in the Table \ref{Table B}.
 
-\item[Output:] A 2-D array that represent the reconstructed attenuation in the
-  Table\ref{Table B}.
+\item[Output:] \st{A 2-D array that represent the reconstructed attenuation in the
+  Table}\add{An image in}\ref{Table B}.
 
 \item[Test Case Derivation:] This test ensures that the system correctly applies the back-projection process to reconstruct an image from a given sinogram. The test verifies that the output maintains the expected shape and that the reconstructed attenuation values correctly represent the original structure.
 
 \item[How test will be performed:] The test will be automated using PyTest.
 \end{description}
-\end{enumerate}
+\end{itemize}
 
 
 \begin{table}[H]
   \centering
-  \begin{tabularx}{\linewidth}{|X|X|X|}
+  \begin{tabularx}{\linewidth}{|X|p{6cm}|p{4cm}|}
     \hline
-    Test Id                                  & Input                                            & Expected Output                                                                                                                             \\
+    Test Id                                  & Input
+                                             & Expected Output
+    \\
     \hline
-    test-output-attenuation-id\ref{id5}         & Sinogram can be found in
-                                                   \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
-                                                   Image Archive} under the
-                                                   title \lq Clinical
-                                                   Data\rq; Filter Type:
-                                                   ramp (str); Output size:
-                                                   256 & Attenuation can be found in
-                                                   \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
-                                                   Image Archive} under the
-                                                   title \lq Patients Report\rq \\ \hline
-    test-output-attenuation-id\ref{id6}         & Sinogram can be found in
-                                                       \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
-                                                       Image Archive} under the
-                                                       title \lq Clinical
-                                                       Data\rq; Filter Type:
-                                                       shepp (str); Output size:
-                                                       256 & Attenuation can be found in
-                                                       \href{https://www.cancerimagingarchive.net/collection/ldct-and-projection-data/}{Cancer
-                                                       Image Archive} under the
-                                                       title \lq Patients
-                                                             Report\rq \\ \hline
+    test-output-attenuation-id\ref{id5}
+                                             & \centering sinogram
+                                               = \includegraphics[scale=0.25]{t1_r.png}
+                                               (sino.jpg),
+                                               theta = 180 (projection angle in
+                                               degree),
+                                               Ramp (filter type in enum),
+                                               os = 256 (output size in int)
+                                             & \includegraphics[scale=0.25]{shepp.png} (result.jpg)
+    \\
+    \hline
+    test-output-attenuation-id\ref{id6}
+                                             & \centering sinogram
+                                               = \includegraphics[scale=0.25]{t1_r.png}
+                                               (sino.jpg),
+                                               theta = 180 (projection angle in
+                                               degree),
+                                               Shepp (filter type in enum),
+                                               os = 256 (output size in int)
+                                             & \includegraphics[scale=0.25]{shepp.png} (result.jpg)
+    \\ \hline
   \end{tabularx}
-  \caption{The inputs and outputs for FBP tests}
+  \caption{\add{The inputs and outputs for FBP tests}}
   \label{Table B}
 \end{table}
 \subsection{Tests for Nonfunctional Requirements} \label{TNFR}
@@ -499,7 +577,7 @@ Section 5.2.
 
 \paragraph{Test for Accuracy}
 
-\begin{enumerate}
+\begin{itemize}
 
 \item{test-accuracy-\refstepcounter{testnum} \label{id7} \dthetestnum\\}
 
@@ -509,13 +587,13 @@ Initial State: Reconstructed image is available.
 
 Input/Condition: The reconstructed image and the corresponding ground truth image.
 
-Output/Result: Error margin (Mean Square Error) is computed and compared against the predefined tolerance level.
+Output/Result: Error margin (\href{https://en.wikipedia.org/wiki/Mean_squared_error}{Mean Square Error}) is computed and compared against the predefined tolerance level.
 
 How test will be performed: The test will compare the reconstructed images with
-ground-truth images using metrics like Mean Squared Error (MSE). The relative
+ground-truth images \add{in the frequency domain} using metrics like Mean Squared Error (MSE). The relative
 error for each test case will be recorded and analyzed.
 
-\end{enumerate}
+\end{itemize}
 
 \paragraph{Test for Usability}
 
@@ -528,7 +606,7 @@ Type: Manual.
 Initial State: System interface is implemented. Usability survey in Section
 \ref{survey} is predefined.
 
-Input/Condition: Joe in Table \ref{vnvteam} perform tasks follows the survey.
+Input/Condition: Joe in Table \ref{vnvteam} perform tasks follows the survey in \ref{survey}.
 
 Output/Result: Feedback from usability survey, including ease of use, clarity of
 instructions, and efficiency of interaction.
@@ -633,35 +711,12 @@ will also be evaluated.
 
 \section{Unit Test Description} \label{sec5}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
-
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}
-
-\wss{To save space and time, it may be an option to provide less detail in this section.
-For the unit tests you can potentially layout your testing strategy here.  That is, you
-can explain how tests will be selected for each module.  For instance, your test building
-approach could be test cases for each access program, including one test for normal behaviour
-and as many tests as needed for edge cases.  Rather than create the details of the input
-and output here, you could point to the unit testing code.  For this to work, you code
-needs to be well-documented, with meaningful names for all of the tests.}
-
 \subsection{Unit Testing Scope}
-
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+All modules (reconstruction and simulation) will be covered
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
-
-\subsubsection{Module 1}
+\subsubsection{Reconstruction}
 
 \wss{Include a blurb here to explain why the subsections below cover the module.
   References to the MIS would be good.  You will want tests from a black box
@@ -672,93 +727,79 @@ needs to be well-documented, with meaningful names for all of the tests.}
 
 \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Type: Automatic
 
-Initial State:
+Initial State: Pending input
 
-Input:
+Input: A dummy sinogram (2-D array) generated using Numpy with size 180
+(projection angle) and a shepp (filter type as enum).
 
-Output: \wss{The expected result for the given inputs}
+Output: True
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: Comparing the dummy sinogram and the reconstructed result
+and they should have the same shape.
 
-How test will be performed:
+How test will be performed: Use the dummy sinogram and 180 projection angle as
+the reconstruction input. Then assert the shape of reconstructed image and dummy sinogram.
 
 \item{test-id2\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Type: Automatic
 
-Initial State:
+Initial State: Pending input
 
-Input:
+Input: A dummy sinogram (2-D array) generated using Numpy with size 180
+(projection angle) and a ramp (filter type as enum).
 
-Output: \wss{The expected result for the given inputs}
+Output: True
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: Comparing the dummy sinogram and the reconstructed result
+and they should have the same shape.
 
-How test will be performed:
+How test will be performed: Use the dummy sinogram and 180 projection angle as
+the reconstruction input. Then assert the shape of reconstructed image and dummy sinogram.
 
-\item{...\\}
+\item{test-id3\\}
+
+Type: Automatic
+
+Initial State: Pending input
+
+Input: A dummy sinogram (2-D array) generated using Numpy with size 60
+(projection angle) and a shepp (filter type as enum).
+
+Output: False
+
+Test Case Derivation: Comparing the dummy sinogram and the reconstructed result.
+Test fails when their shapes are different.
+
+How test will be performed: Use the dummy sinogram and 180 projection angle as
+the reconstruction input. Then assert the shape of reconstructed image and dummy sinogram.
 
 \end{enumerate}
 
-\subsubsection{Module 2}
-
-...
-
-\subsection{Tests for Nonfunctional Requirements}
-
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
-
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
-
-\subsubsection{Module ?}
-
+\subsubsection{Simulation}
 \begin{enumerate}
-
 \item{test-id1\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Type: Automatic
 
-Initial State:
+Initial State: Pending input
 
-Input/Condition:
+Input: A dummy image (1-D array) generated using Numpy with size 180
+(projection angle).
 
-Output/Result:
+Output: False
 
-How test will be performed:
+Test Case Derivation: The wrong input size will raise ValueError.
 
-\item{test-id2\\}
-
-Type: Functional, Dynamic, Manual, Static etc.
-
-Initial State:
-
-Input:
-
-Output:
-
-How test will be performed:
-
+How test will be performed: Assertion.
 \end{enumerate}
 
-\subsubsection{Module ?}
-
-...
-
-\subsection{Traceability Between Test Cases and Modules}
-
-\wss{Provide evidence that all of the modules have been considered.}
-
-%\bibliographystyle{plainnat}
-%
-%\bibliography{../../refs/References}
+\subsection{Tests for Nonfunctional Requirements}
+In \progname projects, planning for nonfunctional tests of units will not be
+that relevant. Because it is no need to consider the performance data and hard
+to find researchers to do the test.
 
 \newpage
 
