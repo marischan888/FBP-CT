@@ -20,18 +20,16 @@ class FBP:
         """
         :param sinogram:  ndarray
             Image containing radon transform (sinogram). Each column of
-            the image corresponds to a projection along a different
-            angle.
+            the image corresponds to a projection along each angle.
         :param theta: int
-            Reconstruction angles (in degrees). Default: m angles evenly spaced
-            between 0 and 180.
-        :param filter_type: str
+            Reconstruction angles (in degrees). Default: 180.
+        :param filter_type: FilterType enum
             Filter used in frequency domain filtering.
             Filters available: ramp, shepp-logan, cosine, hamming, hann.
             Assign None to use no filter.
         :param output_size: int
             Number of rows and columns in the reconstruction.
-        :param interpolation: str
+        :param interpolation: InterpolationType enum
             Interpolation method used in reconstruction. Methods available:
             'linear', 'nearest', and 'cubic' ('cubic' is slow).
         :param preserve_range: bool

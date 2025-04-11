@@ -6,7 +6,7 @@ from src.config.ir_config import FilterType
 class Filters:
     def __init__(self, filter_type: FilterType):
         """
-        :param filter_type: Filter Type
+        :param filter_type: FilterType enum
             ramp, shepp-logan, cosine, hamming, hann.
         """
         self.filter = filter_type
