@@ -38,8 +38,18 @@ urlcolor=cyan          % color of external links
 \input{../../Comments}
 \input{../../Common}
 
-\begin{document}
+\usepackage{gensymb}
+\usepackage{soul,xcolor}
+\newcommand{\add}{\textcolor{red}}
+\usepackage{lipsum}
+\usepackage[many]{tcolorbox}
 
+\newtcolorbox{cross}{blank,breakable,parbox=false,
+  overlay={\draw[red,line width=5pt] (interior.south west)--(interior.north east);
+    \draw[red,line width=5pt] (interior.north west)--(interior.south east);}}
+
+\begin{document}
+\setstcolor{red}
 \title{Module Interface Specification for \progname{}}
 
 \author{\authname}
@@ -142,11 +152,11 @@ The following table is taken directly from the Module Guide document for this pr
 {Behaviour-Hiding}
 & Filter Module\\
 & FBP Module\\
-& IO Handler Module\\
+& \add{Sinogram Simulation Module}\st{IO Handler Module}\\
 \midrule
 
 {Software Decision} & Services Module\\
-& Sinogram Simulation Module\\
+& \add{IO Handler Module}\st{Sinogram Simulation Module}\\
 \bottomrule
 
 \end{tabular}
@@ -176,7 +186,7 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-get\_fourier\_filter & s: \(\mathbb{Z}\), filter\_name: String & filter: \(\mathbb{R}^{s}\)  & ValueError, NULL \\
+get\_fourier\_filter & s: \(\mathbb{Z}\), filter\_name: \add{Enum}\st{String} & \st{filter: }\(\mathbb{R}^{s}\)  & ValueError, NULL \\
 \hline
 \end{tabular}
 \end{center}
@@ -190,15 +200,16 @@ None
 None
 
 \subsubsection{Assumptions}
-Input size s is a positive number.
+\add{None}\st{Input size s is a positive number.}
 
 \subsubsection{Access Routine Semantics}
 
 \noindent get\_filter(s, filter\_name):
 \begin{itemize}
-\item output: \(2\Re(\mathcal{F}(f(s))\) with\\
-  \(f(s) := (filter\_name = 'shepp' \Rightarrow f(s) \mid\mid filter\_name = 'ramp' \Rightarrow g(s) \mid\mid filter\_name = None \Rightarrow None)\) where: \\
-  \begin{itemize}
+\item output: \((\texttt{filter\_name} = \texttt{SHEPP} \Rightarrow f(s) \mid\mid
+  \texttt{filter\_name} = \texttt{RAMP} \Rightarrow g(s) \mid\mid \texttt{filter\_name} =
+  \texttt{NONE} \Rightarrow None)\) where:\\
+  \begin{enumerate}
     \item
       \begin{equation}
         f(s) =
@@ -210,7 +221,6 @@ Input size s is a positive number.
           \end{aligned}
         \right.
       \end{equation}
-
     \item
       \begin{equation}
         g(s) =
@@ -226,10 +236,8 @@ Input size s is a positive number.
           \end{aligned}
         \right.
       \end{equation}
-    \end{itemize}
-
-\item exception: \(exc := (s < 0 \Rightarrow ValueError \mid filter\_name \notin \{ramp, None, shepp\}
-  \Rightarrow NULL)\)
+    \end{enumerate}
+  \item exception: \(exc := (s < 0 \Rightarrow ValueError \mid filter\_name \notin \{\texttt{SHEPP, RAMP, NONE}\} \Rightarrow NULL)\)
 \end{itemize}
 
 
@@ -258,7 +266,7 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-reconstruct & sinogram: \(\mathbb{R}^{m \times m}\), \(theta: \mathbb{R}^{n}\), filter\_name: string, os: int & image: \(\mathbb{R}^{os \times os}\)& ValueError, EmptyArrayError\\
+reconstruct & sinogram: \(\mathbb{R}^{m \times m}\), \(\add{\theta}: \mathbb{R}^{n}\), filter\_name: \add{enum}, os: int & image: \(\mathbb{R}^{os \times os}\)& ValueError, EmptyArrayError\\
 \hline
 \end{tabular}
 \end{center}
@@ -266,25 +274,27 @@ reconstruct & sinogram: \(\mathbb{R}^{m \times m}\), \(theta: \mathbb{R}^{n}\), 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-\(filter \in \mathbb{R}^{s}\): 1D array with size s as the fourier filter.
+\st{2D array with size s as the fourier filter.} \add{None}
 
 \subsubsection{Environment Variables}
 None
 
 \subsubsection{Assumptions}
-Input sinogram are valid 2D frequency spectra.
+\add{None}\st{Input sinogram are valid 2D frequency spectra.}
 
 \subsubsection{Access Routine Semantics}
 
 \noindent reconstruct(sinogram, theta, filter\_name, os):
 \begin{itemize}
-\item transition: \(filter := sinogram \Rightarrow Filter.get\_filter(sinogram.size,
-  filter\_name)\) (get\_filter from Filter Module\ref{ModuleF})
-\item output: out :=
-  \begin{itemize}
-    \item \(\mathcal{F}^{-1}(\mathcal{F}(sinogram)\cdot filter)\)
-    \item perform interpolation over angle theta with the preset image size os.
-  \end{itemize}
+\item output: \(\mathcal{F}^{-1}(\mathcal{F}(sinogram))\) where:
+  \begin{description}
+      \item[Fourier Transform]
+    \[ F(\omega) = \int_{-\infty}^{\infty} f(t) \, e^{-i \omega t} \, dt\]
+    \item[Inverse Fourier Transform]
+      \[ f(t) = \frac{1}{2\pi} \int_{-\infty}^{\infty} F(\omega) \, e^{i \omega t} \, d\omega\]
+     \add{ \(\omega\): rad/s and t is the (x,y) position in spatial domain}
+  \end{description}
+
   \item exception: exc :=
     \begin{center}
       \begin{tabular}{|m{15em}|m{15em}|}
@@ -324,7 +334,7 @@ None
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-radon & image: \(\mathbb{R}^{m \times m}\), preserve\_angle: Boolean, theta: \(\mathbb{R}^{n}\) & sinogram: \(\mathbb{R}^{m \times m}\) & None \\
+radon & image: \(\mathbb{R}^{m \times m}\)\st{, preserve\_angle: Boolean}, \(\theta\): \(\mathbb{R}^{n}\) & sinogram: \(\mathbb{R}^{m \times m}\) & None \\
 \hline
 \end{tabular}
 \end{center}
@@ -342,21 +352,17 @@ Input Image are valid 2D frequency spectra.
 
 \subsubsection{Access Routine Semantics}
 
-
 \noindent
-radon(image, preserve\_angle, theta):
+radon(image\st{, preserve\_angle}, theta):
 \begin{itemize}
-\item output: sinogram.
-\begin{itemize}
-    \item Use padded\_radon to find out the padded\_image and center of the input
-      image
-      \item sinogram := \(padded\_image \Rightarrow \int_{-\infty}^{\infty} padded\_imgae(x\cos(theta) + y\sin(theta),
-        x\sin(theta) - y\cos(theta))dy\)
-\end{itemize}
+\item output:= \(image \Rightarrow \int_{-\infty}^{\infty} imgae(x\cos(\theta) + y\sin(\theta),
+        x\sin(\theta) - y\cos(\theta))dy\)
 \item exception: None
 \end{itemize}
 
 \subsubsection{Local Functions}
+\add{None}
+\begin{cross}
 \noindent
 padding\_radon(image, preserve\_angle):
 \begin{itemize}
@@ -372,6 +378,7 @@ padding\_radon(image, preserve\_angle):
   \end{description}
 \item exception: If image is not an 2D array, raise ValueError
 \end{itemize}
+\end{cross}
 
 \newpage
 \section{MIS of IO Handler Module} \label{ModuleIO}
@@ -380,10 +387,12 @@ padding\_radon(image, preserve\_angle):
 IO Handler
 
 \subsection{Uses}
-FBP Module\\
-Sinogram Simulation Module\\
-Services Module\\
-Hardware Handling Module\\
+\st{
+  FBP Module\\
+  Sinogram Simulation Module\\
+  Services Module\\
+  Hardware Handling Module\\
+}
 
 \subsection{Syntax}
 
@@ -391,13 +400,11 @@ Hardware Handling Module\\
 None
 
 \subsubsection{Exported Access Programs}
-
+\begin{cross}
 \begin{center}
   \begin{tabular}{|l|m{10em}|l|m{8em}|}
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-  \hline
-  select\_service & op: String & None & ValueError \\
   \hline
     process\_service & file: \(\mathbb{R}^{m \times m}\), theta: \(\mathbb{R}^{m}\), filter\_name: String, os: int, preserve\_angle: Boolean & None & None \\
   \hline
@@ -405,22 +412,25 @@ None
   \hline
 \end{tabular}
 \end{center}
-
+\end{cross}
+\add{None}
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-service: service type\\
-sinogram: a 2D array with size m\\
-reconstructed\_image: a 2D array with size os\\
+\st{
+  service: service type\\
+  sinogram: a 2D array with size m\\
+  reconstructed\_image: a 2D array with size os\\
+}
 
 \subsubsection{Environment Variables}
 None
 
 \subsubsection{Assumptions}
-Input Image are valid 2D frequency spectra.
+\add{None}\st{Input Image are valid 2D frequency spectra.}
 
 \subsubsection{Access Routine Semantics}
-
+\begin{cross}
 \noindent
 select\_services(op):
 \begin{itemize}
@@ -446,14 +456,24 @@ get\_reconstruction(None):
 \item output: out := reconstructed\_image
 \item exception: None
 \end{itemize}
+\end{cross}
+
 \subsubsection{Local Functions}
 \noindent
-load\_image(file, preserve\_angle):
+load\_image(file\st{, preserve\_angle}):
 \begin{itemize}
-\item output: read image file and return a 2D numpy array.
+\item output: read user-input image file and return a 2D numpy array.
 \item exception: exc := file does not exit then FileNotFound.
 \end{itemize}
-
+\noindent
+\add{
+save\_image(image):
+\begin{itemize}
+\item output: read reconstructed image (2D numpy array) from fbp and save jpg image
+  file to selected local path.
+\item exception: exc := path does not exit then PathNotFound.
+\end{itemize}
+}
 \newpage
 \section{MIS of Services Module} \label{ModuleCon}
 
@@ -461,13 +481,15 @@ load\_image(file, preserve\_angle):
 Services
 
 \subsection{Uses}
-None
+\add{FBP Module, Simulation Module, IO Handler Module}
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
-VERIFICATION = 0\\
-RECONSTRUCTION = 1\\
+\add{None}\st{
+  VERIFICATION = 0\\
+  RECONSTRUCTION = 1\\
+}
 
 \subsubsection{Exported Access Programs}
 None
@@ -487,7 +509,26 @@ None
 None
 
 \subsubsection{Local Functions}
-None
+\noindent
+\add{
+reconstruct(sinogram: \(\mathbb{R}^{m \times m}\), \(\theta: \mathbb{R}^{n}\), filter\_name: enum, os: int):
+\begin{itemize}
+\item it is just a API Gateway for user calling the reconstruction service in
+  Module\ref{ModuleFBP} and provide saving result option using Module\ref{ModuleIO}.
+\item output: None.
+\item exception: None
+\end{itemize}
+}
+\noindent
+\add{
+simulate(image: \(\mathbb{R}^{m \times m}\), \(\theta: \mathbb{R}^{n}\), filter\_name: enum, os: int):
+\begin{itemize}
+\item it is just a API Gateway for user calling the simulation service in
+  Module\ref{ModuleS} and provide saving result option using Module\ref{ModuleIO}.
+\item output: None.
+\item exception: None
+\end{itemize}
+}
 
 \newpage
 
