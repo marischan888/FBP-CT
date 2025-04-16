@@ -11,16 +11,18 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{float}
 
 \input{../Comments}
 \input{../Common}
 
 \begin{document}
 
-\title{Verification and Validation Report: \progname} 
+\title{Verification and Validation Report: \progname}
 \author{\authname}
 \date{\today}
-	
 \maketitle
 
 \pagenumbering{roman}
@@ -30,8 +32,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+April 16, 2025 & 1.0 & Initial document\\
 \bottomrule
 \end{tabularx}
 
@@ -40,10 +41,10 @@ Date 2 & 1.1 & Notes\\
 \section{Symbols, Abbreviations and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
+\begin{tabular}{l l}
+  \toprule
   \textbf{symbol} & \textbf{description}\\
-  \midrule 
+  \midrule
   T & Test\\
   \bottomrule
 \end{tabular}\\
@@ -62,64 +63,104 @@ Date 2 & 1.1 & Notes\\
 
 \pagenumbering{arabic}
 
-This document ...
-
 \section{Functional Requirements Evaluation}
+Each functional requirement was evaluated based on the reflection of
+implementation presentation and tool's test
+results.
+
+The demonstration provided a valuable opportunity to observe how others
+interpreted the output of the reconstruction pipeline, leading to adjustments in
+the GUI for better visual clarity and confirmation of expected behavior. The
+core functionality, Radon transform, filtering, and back-projection, was
+tested via unit tests. Results show that expected outputs were generated for
+provided synthetic inputs.
 
 \section{Nonfunctional Requirements Evaluation}
 
 \subsection{Usability}
-		
+The software features a GUI designed using Tkinter with ttkbootstrap for
+enhanced usability. Users can upload images or .h5 files, select reconstruction
+methods, and visualize results without manual configuration.
+
 \subsection{Performance}
+Performance is constrained by the numerical computations in Fourier filtering
+and back-projection. Though not heavily optimized, the runtime remains
+acceptable for standard image sizes.
 
-\subsection{etc.}
-	
-\section{Comparison to Existing Implementation}	
-
-This section will not be appropriate for every project.
+\subsection{Portability, Maintainability, and Reusability}
+The system supports multiple platforms and is modularized. Each function is
+encapsulated in dedicated modules to enhance maintainability. Filter operations
+can be reused for different projection types.
 
 \section{Unit Testing}
+Unit testing was performed using pytest. A total of 7 test cases were written and executed:
+\begin{figure}[H]
+  \includegraphics[scale=0.8]{test.png}
+\caption{Unit testing results}
+\label{test}
+\end{figure}
+
+All tests passed successfully, indicating that core functionality such as ramp
+filtering and back-projection works correctly for the tested cases.
 
 \section{Changes Due to Testing}
-
-\wss{This section should highlight how feedback from the users and from 
-the supervisor (when one exists) shaped the final product.  In particular 
-the feedback from the Rev 0 demo to the supervisor (or to potential users) 
-should be highlighted.}
+Initial test results highlighted unhandled edge cases and mismatches in data
+shape during filtering. Adjustments were made to input validation and
+interpolation steps to align inputs and expected outputs. Some utility functions
+were also refactored to isolate logic for better testing.
 
 \section{Automated Testing}
-		
+Automated testing was conducted using pytest. All test scripts were executed in
+Github Actions (as Figure \ref{test}), ensuring continuous integration and
+deployment (CI/CD). This setup verifies the system on every commit, reducing the
+risk of regression and maintaining code reliability.
+
 \section{Trace to Requirements}
-		
-\section{Trace to Modules}		
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+  \tikz{\node[below left, inner sep=1pt] (test) {test};%
+      \node[above right,inner sep=5pt] (requirement) {requirement};%
+      \draw (test.north west|-requirement.north west) -- (test.south east-|requirement.south east);}
+   & R1 & R2 & R3  \\
+\hline
+test\_sino\_gen.py  & X  &    &     \\ \hline
+test\_filters.py  &    & X  &     \\ \hline
+test\_filters.py  &    &    &  X  \\ \hline
+\end{tabular}
+\caption{Traceability Matrix Showing the Connections Between Functional Requirements and
+  Test Cases}
+\label{Table:R_trace}
+\end{table}
 
+\section{Trace to Modules}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+  \tikz{\node[below left, inner sep=1pt] (test) {test};%
+      \node[above right,inner sep=5pt] (module) {module};%
+      \draw (test.north west|-requirement.north west) -- (test.south east-|requirement.south east);}
+   & Simulation & FBP & Filters  \\
+\hline
+test\_sino\_gen.py  & X  &    &     \\ \hline
+test\_filters.py  &    & X  &     \\ \hline
+test\_filters.py  &    &    &  X  \\ \hline
+\end{tabular}
+\caption{Traceability Matrix Showing the Connections Between Behaviour Modules and
+  Test Cases}
+\label{Table:M_trace}
+\end{table}
+
+\newpage
 \section{Code Coverage Metrics}
-
-\bibliographystyle{plainnat}
-\bibliography{../../refs/References}
-
-\newpage{}
-\section*{Appendix --- Reflection}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Reflection.
-
-\input{../Reflection.tex}
-
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item Which parts of this document stemmed from speaking to your client(s) or
-  a proxy (e.g. your peers)? Which ones were not, and why?
-  \item In what ways was the Verification and Validation (VnV) Plan different
-  from the activities that were actually conducted for VnV?  If there were
-  differences, what changes required the modification in the plan?  Why did
-  these changes occur?  Would you be able to anticipate these changes in future
-  projects?  If there weren't any differences, how was your team able to clearly
-  predict a feasible amount of effort and the right tasks needed to build the
-  evidence that demonstrates the required quality?  (It is expected that most
-  teams will have had to deviate from their original VnV Plan.)
-\end{enumerate}
+Code coverage was evaluated using the coverage tool.Services and utils modules
+is covered when testing the main modules. An HTML report was generated:
+\begin{figure}[H]
+    \includegraphics[scale=0.6]{coverage.png}
+    \caption{Coverage Report}
+    \label{coverage}
+\end{figure}
 
 \end{document}
