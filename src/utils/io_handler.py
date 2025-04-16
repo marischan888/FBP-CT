@@ -48,7 +48,8 @@ def save_result(result: np.ndarray, path: str):
     if ext == '.h5':
         with h5py.File(path, 'w') as f:
             f.create_dataset('data', data=result)
-    elif ext in ['.png', '.jpg', '.jpeg']:
+    # TODO: Add more format and provide a formate selection in GUI
+    elif ext in '.png':
         save_image(result, path)
     else:
         raise ValueError(

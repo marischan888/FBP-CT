@@ -13,8 +13,18 @@
 
 \input{../Comments}
 \input{../Common}
+\usepackage{gensymb}
+\usepackage{soul,xcolor}
+\newcommand{\add}{\textcolor{red}}
+\usepackage{lipsum}
+\usepackage[many]{tcolorbox}
+
+\newtcolorbox{cross}{blank,breakable,parbox=false,
+  overlay={\draw[red,line width=5pt] (interior.south west)--(interior.north east);
+    \draw[red,line width=5pt] (interior.north west)--(interior.south east);}}
 
 \begin{document}
+\setstcolor{red}
 
 \maketitle
 
@@ -25,8 +35,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
   January 16, 2025 & Qianlin Chen & Initial Draft \\
-\midrule
-  ... & ... & ...\\
+  April 16, 2025 & Qianlin Chen & Final Document \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -45,7 +54,7 @@ a two- or three-dimensional object from multiple one-dimensional ``slices'' of
 the object. In a CT scan, these slices are created by multiple parallel X-ray
 beams passing through the object at varying angles. The initial and final
 intensity of each beam is recorded, and the original image is reconstructed
-using backprojection with this data from multiple slices\cite{Beatty2012}.
+using backprojection with this data from multiple slices \cite{Beatty2012}.
 %% What is the problem and Why is this problem matter:
 \newline However, significant noise blurs the recreated image, even as the number of
 backprojections increases. Regardless of the number of directions used for
@@ -53,13 +62,13 @@ backprojection, it can not perfectly recreate the image using the backprojection
 formula\cite{Beatty2012}. Therefore, it is necessary to develop techniques to filter out noise
 created by backprojection and produce a smoother representation of the object.
 Additionally, different filtering techniques may yield varying reconstruction
-efficiencies, so selecting an appropriate filter is crucial\cite{Lyra2011}.
+efficiencies, so selecting an appropriate filter is crucial \cite{Lyra2011}.
 
 \subsection{Inputs and Outputs}
 \subsubsection{Inputs}
 \begin{itemize}
-\item Phantom images.
-\item Sinogram data.
+\item \add{Image (for Sinogram data simulation).}\st{Phantom images}.
+\item Sinogram data \add{(for reconstruction).}
 \item Projection angles.
 \item Filter type to be applied during backprojection.
 \end{itemize}
@@ -67,6 +76,7 @@ efficiencies, so selecting an appropriate filter is crucial\cite{Lyra2011}.
 \subsubsection{Outputs}
 \begin{itemize}
   \item Reconstructed CT images.
+  \item \add{Simulated Sinogram data}
 \end{itemize}
 
 \subsection{Stakeholders}
@@ -87,6 +97,8 @@ efficiencies, so selecting an appropriate filter is crucial\cite{Lyra2011}.
   the quality of reconstructed CT images through advanced filtering techniques.
 \item[Filter Options] \hfill \\ The tool should provide high-pass and
   low-pass filter options to filter different types of noise.
+ \item[Sinogram Simulation] \hfill \\ \add{This tool should provide a CT detector
+     simulation to generate sinogrm given any CT image.}
 \end{description}
 
 \section{Stretch Goals}
@@ -98,23 +110,25 @@ efficiencies, so selecting an appropriate filter is crucial\cite{Lyra2011}.
 \end{description}
 
 \section{Challenge Level and Extras}
-The main challenge lies in the integration of domain knowledge from the medical
-and mathematical fields. Understanding the principles of medical imaging,
-including tomography and the Radon transform, as well as mastering the
-associated mathematical concepts, requires additional effort.
+\st{
+  The main challenge lies in the integration of domain knowledge from the medical
+  and mathematical fields. Understanding the principles of medical imaging,
+  including tomography and the Radon transform, as well as mastering the
+  associated mathematical concepts, requires additional effort.
 
-Testing poses another difficulty in this project. For functional testing, the
-lack of access to high-quality datasets limits the ability to evaluate the
-accuracy and effectiveness of the reconstruction process. For usability testing,
-reaching potential users, such as researchers in medical imaging or related
-fields, is difficult due to their limited availability.
+  Testing poses another difficulty in this project. For functional testing, the
+  lack of access to high-quality datasets limits the ability to evaluate the
+  accuracy and effectiveness of the reconstruction process. For usability testing,
+  reaching potential users, such as researchers in medical imaging or related
+  fields, is difficult due to their limited availability.
+}
 
 The expected challenge level for this project is general. While it requires
 medical and mathematical knowledge, many research resources are available
 online. The CT image reconstruction process is well-documented and feasible for
 implementation. This project is appropriate for graduate-level study, combining
 computer science with interdisciplinary applications. Since the project is
-intended as a tool rather than for research purposes, a user manual is essential
+intended as a tool rather than for research purposes, a \add{video} user manual is essential
 to guide users in effectively using the tool.
 
 \newpage
