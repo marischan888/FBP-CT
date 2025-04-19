@@ -7,7 +7,7 @@
 
 \author{\authname}
 
-\date{}
+\date{April 18, 2025}
 
 \input{../Comments}
 \input{../Common}
@@ -16,129 +16,146 @@
 
 \maketitle
 
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
-important part of the reflection exercise.  In addition, several CEAB (Canadian
-Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
-on your reflections.}
-
 \section{Changes in Response to Feedback}
-
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
-
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
-
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.  Although the links are
-helpful for the details, you should include a label for each item of feedback so
-that the reader has an idea of what each item is about without the need to click
-on everything to find out.}
-
-\plt{If you were not organized with your commits, traceability between feedback
-and commits will not be feasible to capture after the fact.  You will instead
-need to spend time writing down a summary of the changes made in response to
-each item of feedback.}
-
-\plt{You should address EVERY item of feedback.  A table or itemized list is
-recommended.  You should record every item of feedback, along with the source of
-that feedback and the change you made in response to that feedback.  The
-response can be a change to your documentation, code, or development process.
-The response can also be the reason why no changes were made in response to the
-feedback.  To make this information manageable, you will record the feedback and
-response separately for each deliverable in the sections that follow.}
-
-\plt{If the feedback is general or incomplete, the TA (or instructor) will not
-be able to grade your response to feedback.  In that case your grade on this
-document, and likely the Revision 1 versions of the other documents will be
-low.} 
-
 \subsection{SRS and Hazard Analysis}
+Feedback from teammates and reviewers highlighted several areas for improvement,
+which were promptly addressed:
+
+\begin{description}
+\item[Issue 4] \hfill \\
+  One reviewer pointed out that Section 3.1 lacked a visual system context
+  diagram. This feedback was extremely helpful, and I addressed it by adding a
+  diagram showing the relationship between users, external systems, and the CT
+  reconstruction application. This addition made the architecture clearer to
+  both technical and non-technical readers.
+\item[Issue 5] \hfill \\
+  Another comment emphasized that assumptions listed in Section 4.2.1 were
+  inconsistently referenced in the Traceability Matrix. In response, I carefully
+  cross-linked each assumption (A1, A2) with all relevant sections, including
+  Theoretical Models (TM), Data Definitions (DD), and Instance Models (IM). This
+  improved the internal consistency and traceability of the document.
+\item[Issue 6] \hfill \\
+  The peer suggested that the table in Section 4.2.7 lacked software-specific
+  constraint details, such as frequency limits for filters. Based on this, I
+  extended the description to clearly specify expected input ranges and system
+  handling for out-of-bound values.
+\item[Issue 7] \hfill \\
+  The maintainability NFR in Section 5.2 mentioned a threshold of “10\% of the
+  original development time,” but lacked a formal definition of “FRACTION.” I
+  added this constant to the Values of Auxiliary Constants section and clarified
+  it in the NFR description.
+\item[Issue 8] \hfill \\
+  A reviewer noted inconsistent naming conventions in Section 4.2.2, where
+  “Radon Transform” was occasionally written as “Randon Transform.” These typos
+  were corrected and naming across the document was standardized to avoid
+  confusion.
+\end{description}
+\subsection{VnV Plan and Report}
+Add more details and fix the error based on the final implementations.
 
 \subsection{Design and Design Documentation}
+\subsubsection{MIS}
+From the peer review:
+\begin{description}
+\item[Issue 11] \hfill \\
+  A reviewer recommended replacing variable names like theta with their
+  corresponding mathematical symbols. This suggestion aligned with the intent
+  of MIS to be a mathematical document rather than a programming specification.
+  I updated all such instances to use proper math symbols, improving clarity and
+  formatting consistency.
+\item[Issues 12 and 14] \hfill \\
+  Fix the minor syntax error.
+\item[Issue 13] \hfill \\
+  A peer flagged that a function F appeared in a formula without being defined
+  anywhere in the document. I resolved this by either removing the undefined
+  function or adding an explanation for its role in the context of the filter
+  operation. This helped reduce ambiguity and improved traceability.
+\item[Issue 15] \hfill \\
+  One of the local functions was named inconsistently as padded\_radon vs.
+  padding\_radon, and a return value center was unused in the subsequent
+  documentation. After review, I corrected the function name and removed the
+  redundant return to streamline the semantics and reduce confusion.
+\end{description}
 
-\subsection{VnV Plan and Report}
+\subsubsection{MG}
+\begin{description}
+\item[Issue 16] \hfill \\
+  It was noted that some modules, particularly M5 and M6, were missing explicit
+  type declarations (e.g., Abstract Data Type, Abstract Object, etc.). After
+  reviewing their roles, I added the appropriate classifications to both
+  modules. M5 was marked as a Service Module, and M6 as an Abstract Data Type,
+  reflecting their usage patterns and the level of abstraction they represent.
+\item[Issue 17] \hfill \\
+  The Filters Module (M3) was originally labeled as an Abstract Data Type. A
+  peer reviewer correctly pointed out that it should be classified as an
+  Abstract Object instead, since it encapsulates behavior but maintains no
+  internal state. This was an insightful distinction, and updating the
+  classification made the design documentation more precise and aligned with the
+  standard MG template.
+\end{description}
 
 \section{Challenge Level and Extras}
 
 \subsection{Challenge Level}
-
-\plt{State the challenge level (advanced, general, basic) for your project.  Your challenge level should exactly match what is included in your problem statement.  This should be the challenge level agreed on between you and the course instructor.}
+General level.
 
 \subsection{Extras}
 
-\plt{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
-
+\href{https://youtu.be/axvVFo77N7o}{video guide}
 \section{Design Iteration (LO11 (PrototypeIterate))}
+The initial design focused solely on implementing the Filtered Back Projection (FBP) algorithm via a command-line interface. However, early feedback from users indicated that visual interaction and easier parameter tuning were highly desired, especially for debugging and educational purposes. This led to the integration of a Tkinter-based GUI.
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+Another round of usability feedback during internal demo sessions highlighted confusion about input file formats and lack of result comparison. In response, I redesigned the GUI to clearly label required formats (e.g., .png, .h5) and added a dual display feature for original and reconstructed images side by side. We also included error pop-ups to guide users if invalid files were uploaded. Each iteration incorporated user feedback to better align the interface and features with end-user needs.
 
-\plt{Don't just say what you changed, say why you changed it.  The needs of the
-client should be part of the explanation.  For example, if you made changes in
-response to usability testing, explain what the testing found and what changes
-it led to.}
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?  Discuss each of these
- separately.}
+Several core design decisions were driven by technical constraints and user expectations:
+
+\begin{itemize}
+\item Limitations: I chose not to include advanced CT algorithms (like iterative
+  reconstruction) due to project scope and performance limits on average
+  machines.
+\item Assumptions: I assumed input images would be relatively clean, and that
+  users would be familiar with basic imaging formats.
+\item Constraints: Portability was important, so I used Python and standard
+  libraries (e.g., NumPy, Matplotlib) to avoid OS-specific dependencies.
+\end{itemize}
+Choosing ttkbootstrap for styling allowed us to maintain a modern interface without writing complex CSS or JavaScript. Separating logic into service modules also helped with future extensibility, which was important for users who may want to swap filters or preprocessing steps.
 
 \section{Economic Considerations (LO23)}
+While the CT reconstruction app is primarily academic, it holds potential for
+educational and training use in medical physics or image processing courses. If
+commercialized, the product could be positioned as a lightweight, open-source
+toolkit with optional premium features like advanced reconstruction methods or
+GPU acceleration.
 
-\plt{Is there a market for your product? What would be involved in marketing your 
-product? What is your estimate of the cost to produce a version that you could 
-sell?  What would you charge for your product?  How many units would you have to 
-sell to make money? If your product isn't something that would be sold, like an 
-open source project, how would you go about attracting users?  How many potential 
-users currently exist?}
+Since the product is already released on GitHub, I would focus on community
+building and open-source visibility via documentation, example datasets, and
+outreach to imaging research groups.
 
 \section{Reflection on Project Management (LO24)}
-
-\plt{This question focuses on processes and tools used for project management.}
+As a solo project, I followed my initial plan closely. I maintained a consistent
+workflow using GitHub for version control and issue tracking. Feedback was
+received from the instructor and a peer reviewer, which I scheduled into my
+timeline after each deliverable.
 
 \subsection{How Does Your Project Management Compare to Your Development Plan}
-
-\plt{Did you follow your Development plan, with respect to the team meeting plan, 
-team communication plan, team member roles and workflow plan.  Did you use the 
-technology you planned on using?}
+Working alone gave me flexibility in task prioritization. I was able to move
+quickly, and GitHub helped me document all progress systematically. Reviewer
+feedback was clear and easy to integrate.
 
 \subsection{What Went Well?}
 
-\plt{What went well for your project management in terms of processes and 
-technology?}
+Time estimation for testing and writing formal documents like MIS was off. I spent more time than expected fixing LaTeX formatting and clarifying notation.
 
 \subsection{What Went Wrong?}
 
-\plt{What went wrong in terms of processes and technology?}
+I'd set earlier deadlines for documentation drafts and automate more of the formatting checks. I'd also request feedback earlier instead of waiting for the final round.
 
 \subsection{What Would you Do Differently Next Time?}
-
-\plt{What will you do differently for your next project?}
-
-\section{Reflection on Capstone}
-
-\plt{This question focuses on what you learned during the course of the capstone project.}
-
-\subsection{Which Courses Were Relevant}
-
-\plt{Which of the courses you have taken were relevant for the capstone project?}
-
-\subsection{Knowledge/Skills Outside of Courses}
-
-\plt{What skills/knowledge did you need to acquire for your capstone project
-that was outside of the courses you took?}
+I'd set earlier deadlines for documentation drafts and automate more of the
+formatting checks. I'd also request feedback earlier instead of waiting for the
+final round.
 
 \end{document}
